@@ -115,6 +115,12 @@ JWT access + refresh tokens (`POST /api/v1/auth/login`, `/auth/refresh`). Passwo
 
 Permissions are enforced in the API (`app/core/permissions.py`) — the frontend's route guards are a UX convenience only, never the source of truth.
 
+## Integrating from another website
+
+Want a different e-commerce site to pull order or tracking data from this
+API? See [`docs/API_INTEGRATION.md`](docs/API_INTEGRATION.md) for the auth
+flow, the order-lookup endpoints, and the public tracking endpoint.
+
 ## Core end-to-end flow
 
 1. Admin creates an order (`POST /api/v1/orders`).
