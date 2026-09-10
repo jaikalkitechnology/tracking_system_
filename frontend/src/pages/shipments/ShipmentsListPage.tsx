@@ -61,12 +61,12 @@ export function ShipmentsListPage() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-xl font-semibold text-slate-900">Shipments</h1>
-        <p className="text-sm text-slate-500">Track and manage shipment status across couriers.</p>
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Shipments</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Track and manage shipment status across couriers.</p>
       </div>
 
       <Card>
-        <div className="flex flex-wrap gap-3 border-b border-slate-100 p-4">
+        <div className="flex flex-wrap gap-3 border-b border-slate-100 p-4 dark:border-surface-dark-border">
           <Input
             placeholder="Search tracking number..."
             value={trackingNumber}
@@ -119,7 +119,7 @@ export function ShipmentsListPage() {
                 {
                   header: "Tracking Number",
                   render: (s) => (
-                    <Link to={`/shipments/${s.id}`} className="font-medium text-brand-600">
+                    <Link to={`/shipments/${s.id}`} className="font-medium text-brand-600 dark:text-brand-400">
                       {s.tracking_number}
                     </Link>
                   ),
@@ -131,7 +131,7 @@ export function ShipmentsListPage() {
                 {
                   header: "Actions",
                   render: (s) => (
-                    <Link to={`/shipments/${s.id}`} className="text-sm font-medium text-brand-600 hover:underline">
+                    <Link to={`/shipments/${s.id}`} className="text-sm font-medium text-brand-600 hover:underline dark:text-brand-400">
                       View
                     </Link>
                   ),

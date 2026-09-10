@@ -12,6 +12,7 @@ import { StatCard } from "@/components/charts/StatCard";
 import { EmptyState, ErrorState } from "@/components/ui/EmptyState";
 import { LoadingState } from "@/components/ui/Spinner";
 import { DataTable } from "@/components/tables/DataTable";
+import { IconAlertTriangle, IconOrders, IconPackageCheck, IconShipments, IconTruckMoving } from "@/components/ui/icons";
 import { DashboardSummary, Order, Shipment } from "@/types";
 import { formatCurrency, formatDate } from "@/utils/format";
 
@@ -50,22 +51,22 @@ export function DashboardPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-xl font-semibold text-slate-900">Dashboard</h1>
-        <p className="text-sm text-slate-500">Overview of orders and shipments across your business.</p>
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Dashboard</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Overview of orders and shipments across your business.</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        <StatCard label="Total Orders" value={summary.total_orders} />
-        <StatCard label="Total Shipments" value={summary.total_shipments} />
-        <StatCard label="In Transit" value={summary.in_transit} accent="text-sky-600" />
-        <StatCard label="Delivered" value={summary.delivered} accent="text-green-600" />
-        <StatCard label="Failed" value={summary.failed_deliveries} accent="text-red-600" />
+        <StatCard label="Total Orders" value={summary.total_orders} icon={<IconOrders />} tone="brand" />
+        <StatCard label="Total Shipments" value={summary.total_shipments} icon={<IconShipments />} tone="slate" />
+        <StatCard label="In Transit" value={summary.in_transit} icon={<IconTruckMoving />} tone="sky" />
+        <StatCard label="Delivered" value={summary.delivered} icon={<IconPackageCheck />} tone="emerald" />
+        <StatCard label="Failed" value={summary.failed_deliveries} icon={<IconAlertTriangle />} tone="red" />
       </div>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <h2 className="text-sm font-semibold text-slate-900">Shipment Status</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Shipment Status</h2>
           </CardHeader>
           <CardBody>
             <ShipmentStatusChart data={statistics} />
@@ -73,7 +74,7 @@ export function DashboardPage() {
         </Card>
         <Card>
           <CardHeader>
-            <h2 className="text-sm font-semibold text-slate-900">Orders Over Time</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Orders Over Time</h2>
           </CardHeader>
           <CardBody>
             <OrdersOverTimeChart data={ordersOverTime} />
@@ -83,7 +84,7 @@ export function DashboardPage() {
 
       <Card>
         <CardHeader>
-          <h2 className="text-sm font-semibold text-slate-900">Delivery Performance</h2>
+          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Delivery Performance</h2>
         </CardHeader>
         <CardBody>
           <DeliveryPerformanceChart summary={summary} />
@@ -93,8 +94,8 @@ export function DashboardPage() {
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <Card>
           <CardHeader className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-slate-900">Recent Orders</h2>
-            <Link to="/orders" className="text-xs font-medium text-brand-600 hover:underline">
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Recent Orders</h2>
+            <Link to="/orders" className="text-xs font-medium text-brand-600 hover:underline dark:text-brand-400">
               View all
             </Link>
           </CardHeader>
@@ -107,7 +108,14 @@ export function DashboardPage() {
               rows={recentOrders}
               rowKey={(row) => row.id}
               columns={[
-                { header: "Order #", render: (o) => <Link to={`/orders/${o.id}`} className="font-medium text-brand-600">{o.order_number}</Link> },
+                {
+                  header: "Order #",
+                  render: (o) => (
+                    <Link to={`/orders/${o.id}`} className="font-medium text-brand-600 dark:text-brand-400">
+                      {o.order_number}
+                    </Link>
+                  ),
+                },
                 { header: "Amount", render: (o) => formatCurrency(o.total_amount) },
                 { header: "Status", render: (o) => <Badge status={o.order_status} /> },
                 { header: "Date", render: (o) => formatDate(o.created_at) },
@@ -118,8 +126,8 @@ export function DashboardPage() {
 
         <Card>
           <CardHeader className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-slate-900">Recent Shipments</h2>
-            <Link to="/shipments" className="text-xs font-medium text-brand-600 hover:underline">
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Recent Shipments</h2>
+            <Link to="/shipments" className="text-xs font-medium text-brand-600 hover:underline dark:text-brand-400">
               View all
             </Link>
           </CardHeader>
@@ -132,7 +140,14 @@ export function DashboardPage() {
               rows={recentShipments}
               rowKey={(row) => row.id}
               columns={[
-                { header: "Tracking #", render: (s) => <Link to={`/shipments/${s.id}`} className="font-medium text-brand-600">{s.tracking_number}</Link> },
+                {
+                  header: "Tracking #",
+                  render: (s) => (
+                    <Link to={`/shipments/${s.id}`} className="font-medium text-brand-600 dark:text-brand-400">
+                      {s.tracking_number}
+                    </Link>
+                  ),
+                },
                 { header: "Status", render: (s) => <Badge status={s.status} /> },
                 { header: "Date", render: (s) => formatDate(s.created_at) },
               ]}

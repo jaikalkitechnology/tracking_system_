@@ -11,8 +11,8 @@ export function Pagination({ page, pages, total, onPageChange }: PaginationProps
   if (pages <= 1) return null;
 
   return (
-    <div className="flex items-center justify-between border-t border-slate-100 px-5 py-3">
-      <p className="text-sm text-slate-500">
+    <div className="flex items-center justify-between border-t border-slate-100 px-5 py-3 dark:border-surface-dark-border">
+      <p className="text-sm text-slate-500 dark:text-slate-400">
         Page {page} of {pages} &middot; {total} total
       </p>
       <div className="flex gap-2">

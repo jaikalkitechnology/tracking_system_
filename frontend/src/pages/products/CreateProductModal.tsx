@@ -51,7 +51,7 @@ export function CreateProductModal({ onClose, onCreated }: { onClose: () => void
       }
     >
       <div className="space-y-4">
-        {error && <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>}
+        {error && <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-300">{error}</div>}
         <div>
           <Label>SKU</Label>
           <Input value={form.sku} onChange={(e) => setForm({ ...form, sku: e.target.value })} />

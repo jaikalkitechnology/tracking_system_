@@ -36,8 +36,8 @@ export function CouriersListPage() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">Couriers</h1>
-          <p className="text-sm text-slate-500">Manage delivery partners. API keys are never exposed here.</p>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Couriers</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Manage delivery partners. API keys are never exposed here.</p>
         </div>
         <Button onClick={() => setShowCreate(true)}>+ New Courier</Button>
       </div>
@@ -60,7 +60,7 @@ export function CouriersListPage() {
                 {
                   header: "Name",
                   render: (c) => (
-                    <Link to={`/couriers/${c.id}`} className="font-medium text-brand-600">
+                    <Link to={`/couriers/${c.id}`} className="font-medium text-brand-600 dark:text-brand-400">
                       {c.name}
                     </Link>
                   ),

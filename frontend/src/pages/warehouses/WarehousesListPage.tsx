@@ -36,8 +36,8 @@ export function WarehousesListPage() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">Warehouses</h1>
-          <p className="text-sm text-slate-500">Manage fulfillment locations.</p>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Warehouses</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Manage fulfillment locations.</p>
         </div>
         <Button onClick={() => setShowCreate(true)}>+ New Warehouse</Button>
       </div>
@@ -60,7 +60,7 @@ export function WarehousesListPage() {
                 {
                   header: "Name",
                   render: (w) => (
-                    <Link to={`/warehouses/${w.id}`} className="font-medium text-brand-600">
+                    <Link to={`/warehouses/${w.id}`} className="font-medium text-brand-600 dark:text-brand-400">
                       {w.name}
                     </Link>
                   ),

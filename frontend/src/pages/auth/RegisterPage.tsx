@@ -28,12 +28,16 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h1 className="text-lg font-semibold text-slate-900">Create your account</h1>
-      <p className="mt-1 text-sm text-slate-500">Track your orders and manage your profile.</p>
+    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-card dark:border-surface-dark-border dark:bg-surface-dark-subtle dark:shadow-card-dark">
+      <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-50">Create your account</h1>
+      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Track your orders and manage your profile.</p>
 
       <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-        {error && <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>}
+        {error && (
+          <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-300">
+            {error}
+          </div>
+        )}
         <div>
           <Label>Full name</Label>
           <Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
@@ -61,9 +65,9 @@ export function RegisterPage() {
         </Button>
       </form>
 
-      <p className="mt-4 text-center text-sm text-slate-500">
+      <p className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
         Already have an account?{" "}
-        <Link to="/login" className="font-medium text-brand-600 hover:underline">
+        <Link to="/login" className="font-medium text-brand-600 hover:underline dark:text-brand-400">
           Sign in
         </Link>
       </p>
