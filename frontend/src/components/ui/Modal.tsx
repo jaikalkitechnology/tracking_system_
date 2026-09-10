@@ -12,16 +12,24 @@ export function Modal({ open, title, onClose, children, footer }: ModalProps) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-lg rounded-xl bg-white shadow-xl">
-        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-          <h3 className="text-base font-semibold text-slate-900">{title}</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600" aria-label="Close">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 px-4 backdrop-blur-sm animate-fade-in">
+      <div className="w-full max-w-lg rounded-xl border border-slate-200 bg-white shadow-xl animate-slide-up dark:border-surface-dark-border dark:bg-surface-dark-subtle">
+        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 dark:border-surface-dark-border">
+          <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{title}</h3>
+          <button
+            onClick={onClose}
+            className="rounded-md p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-200"
+            aria-label="Close"
+          >
             ✕
           </button>
         </div>
         <div className="max-h-[70vh] overflow-y-auto px-5 py-4">{children}</div>
-        {footer && <div className="flex justify-end gap-2 border-t border-slate-100 px-5 py-4">{footer}</div>}
+        {footer && (
+          <div className="flex justify-end gap-2 border-t border-slate-100 px-5 py-4 dark:border-surface-dark-border">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );

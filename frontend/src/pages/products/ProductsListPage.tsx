@@ -45,14 +45,14 @@ export function ProductsListPage() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">Products</h1>
-          <p className="text-sm text-slate-500">Manage your product catalog.</p>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Products</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Manage your product catalog.</p>
         </div>
         {isStaff && <Button onClick={() => setShowCreate(true)}>+ New Product</Button>}
       </div>
 
       <Card>
-        <div className="border-b border-slate-100 p-4">
+        <div className="border-b border-slate-100 p-4 dark:border-surface-dark-border">
           <Input
             placeholder="Search by name or SKU..."
             value={search}
@@ -81,7 +81,7 @@ export function ProductsListPage() {
                 {
                   header: "Product",
                   render: (p) => (
-                    <Link to={`/products/${p.id}`} className="font-medium text-brand-600">
+                    <Link to={`/products/${p.id}`} className="font-medium text-brand-600 dark:text-brand-400">
                       {p.name}
                     </Link>
                   ),

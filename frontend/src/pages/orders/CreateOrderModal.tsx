@@ -70,7 +70,7 @@ export function CreateOrderModal({ onClose, onCreated }: { onClose: () => void; 
       }
     >
       <div className="space-y-4">
-        {error && <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>}
+        {error && <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-300">{error}</div>}
 
         <div>
           <Label>Customer</Label>
@@ -114,7 +114,7 @@ export function CreateOrderModal({ onClose, onCreated }: { onClose: () => void; 
           <button
             type="button"
             onClick={() => setItems((prev) => [...prev, { product_id: 0, quantity: 1 }])}
-            className="mt-2 text-sm font-medium text-brand-600 hover:underline"
+            className="mt-2 text-sm font-medium text-brand-600 hover:underline dark:text-brand-400"
           >
             + Add another item
           </button>

@@ -42,8 +42,8 @@ export function NotificationsPage() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">Notifications</h1>
-          <p className="text-sm text-slate-500">Updates about your orders and shipments.</p>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Notifications</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Updates about your orders and shipments.</p>
         </div>
         <Button variant="secondary" onClick={handleMarkAllRead}>
           Mark all as read
@@ -61,18 +61,23 @@ export function NotificationsPage() {
           <EmptyState title="You're all caught up" description="No notifications yet." />
         ) : (
           <>
-            <ul className="divide-y divide-slate-100">
+            <ul className="divide-y divide-slate-100 dark:divide-surface-dark-border">
               {data.items.map((n) => (
-                <li key={n.id} className={`flex items-start justify-between gap-4 px-5 py-4 ${!n.is_read ? "bg-brand-50/40" : ""}`}>
+                <li
+                  key={n.id}
+                  className={`flex items-start justify-between gap-4 px-5 py-4 ${
+                    !n.is_read ? "bg-brand-50/40 dark:bg-brand-500/10" : ""
+                  }`}
+                >
                   <div>
-                    <p className="text-sm font-medium text-slate-900">{n.title}</p>
-                    <p className="mt-0.5 text-sm text-slate-600">{n.message}</p>
-                    <p className="mt-1 text-xs text-slate-400">{formatDateTime(n.created_at)}</p>
+                    <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{n.title}</p>
+                    <p className="mt-0.5 text-sm text-slate-600 dark:text-slate-300">{n.message}</p>
+                    <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">{formatDateTime(n.created_at)}</p>
                   </div>
                   {!n.is_read && (
                     <button
                       onClick={() => handleMarkRead(n.id)}
-                      className="whitespace-nowrap text-xs font-medium text-brand-600 hover:underline"
+                      className="whitespace-nowrap text-xs font-medium text-brand-600 hover:underline dark:text-brand-400"
                     >
                       Mark as read
                     </button>

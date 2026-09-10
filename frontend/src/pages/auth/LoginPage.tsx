@@ -29,12 +29,16 @@ export function LoginPage() {
   };
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h1 className="text-lg font-semibold text-slate-900">Sign in</h1>
-      <p className="mt-1 text-sm text-slate-500">Access your admin or customer dashboard.</p>
+    <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-card dark:border-surface-dark-border dark:bg-surface-dark-subtle dark:shadow-card-dark">
+      <h1 className="text-lg font-semibold text-slate-900 dark:text-slate-50">Sign in</h1>
+      <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Access your admin or customer dashboard.</p>
 
       <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-        {error && <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>}
+        {error && (
+          <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-300">
+            {error}
+          </div>
+        )}
         <div>
           <Label>Email</Label>
           <Input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" />
@@ -48,14 +52,14 @@ export function LoginPage() {
         </Button>
       </form>
 
-      <p className="mt-4 text-center text-sm text-slate-500">
+      <p className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
         Don&apos;t have an account?{" "}
-        <Link to="/register" className="font-medium text-brand-600 hover:underline">
+        <Link to="/register" className="font-medium text-brand-600 hover:underline dark:text-brand-400">
           Create one
         </Link>
       </p>
-      <p className="mt-2 text-center text-sm text-slate-500">
-        <Link to="/track" className="font-medium text-brand-600 hover:underline">
+      <p className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
+        <Link to="/track" className="font-medium text-brand-600 hover:underline dark:text-brand-400">
           Track a shipment without signing in
         </Link>
       </p>

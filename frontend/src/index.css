@@ -8,6 +8,44 @@ body,
   height: 100%;
 }
 
+html {
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
 body {
-  @apply bg-slate-50 text-slate-900;
+  @apply bg-slate-50 text-slate-900 antialiased;
+  @apply dark:bg-surface-dark dark:text-slate-100;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+::selection {
+  @apply bg-brand-200 text-brand-900;
+}
+
+.dark ::selection {
+  @apply bg-brand-800 text-brand-50;
+}
+
+/* Slim, unobtrusive scrollbars that still work with dark mode */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: theme("colors.slate.300") transparent;
+}
+
+.dark * {
+  scrollbar-color: theme("colors.surface.dark-border") transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: theme("colors.slate.300");
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: theme("colors.surface.dark-border");
 }

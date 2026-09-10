@@ -17,7 +17,7 @@ export function DataTable<T>({ columns, rows, rowKey }: DataTableProps<T>) {
     <div className="overflow-x-auto">
       <table className="w-full min-w-[720px] text-left text-sm">
         <thead>
-          <tr className="border-b border-slate-100 text-xs uppercase tracking-wide text-slate-500">
+          <tr className="border-b border-slate-100 text-xs uppercase tracking-wide text-slate-500 dark:border-surface-dark-border dark:text-slate-400">
             {columns.map((col) => (
               <th key={col.header} className={`px-5 py-3 font-medium ${col.className || ""}`}>
                 {col.header}
@@ -27,7 +27,10 @@ export function DataTable<T>({ columns, rows, rowKey }: DataTableProps<T>) {
         </thead>
         <tbody>
           {rows.map((row) => (
-            <tr key={rowKey(row)} className="border-b border-slate-50 last:border-0 hover:bg-slate-50">
+            <tr
+              key={rowKey(row)}
+              className="border-b border-slate-50 text-slate-700 transition-colors last:border-0 hover:bg-slate-50 dark:border-surface-dark-border/60 dark:text-slate-300 dark:hover:bg-white/5"
+            >
               {columns.map((col) => (
                 <td key={col.header} className={`px-5 py-3 ${col.className || ""}`}>
                   {col.render(row)}
