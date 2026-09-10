@@ -18,6 +18,20 @@ Make sure MySQL 8 is running and the database in `DATABASE_URL` exists:
 CREATE DATABASE ecommerce_tracking;
 ```
 
+### Connecting to your own MySQL instance
+
+`DATABASE_URL` lives only in `backend/.env` (gitignored — never commit it or hardcode it in `app/database/database.py`). Point it at your MySQL server:
+
+```env
+DATABASE_URL=mysql+pymysql://<user>:<password>@<host>:<port>/ecommerce_tracking
+```
+
+- Local default install: `mysql+pymysql://root:password@localhost:3306/ecommerce_tracking`
+- Docker Compose (`docker-compose.yml` in the repo root): `mysql+pymysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/${MYSQL_DATABASE}` — the `mysql` service is already reachable by that hostname from the `backend` container.
+- A remote/managed MySQL instance: use its host, port, and credentials as provided; add `?ssl_mode=REQUIRED` (or your provider's equivalent) if it requires TLS.
+
+`app/core/config.py` reads `DATABASE_URL` from the environment at startup and `app/database/database.py` builds the SQLAlchemy engine from it — no code changes are needed to switch databases, only the `.env` value.
+
 ## Migrations
 
 ```bash
