@@ -50,14 +50,14 @@ export function OrdersListPage() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">Orders</h1>
-          <p className="text-sm text-slate-500">Manage customer orders and payment status.</p>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Orders</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Manage customer orders and payment status.</p>
         </div>
         {isStaff && <Button onClick={() => setShowCreate(true)}>+ New Order</Button>}
       </div>
 
       <Card>
-        <div className="flex flex-wrap gap-3 border-b border-slate-100 p-4">
+        <div className="flex flex-wrap gap-3 border-b border-slate-100 p-4 dark:border-surface-dark-border">
           <Input
             placeholder="Search order number..."
             value={search}
@@ -101,7 +101,7 @@ export function OrdersListPage() {
                 {
                   header: "Order Number",
                   render: (o) => (
-                    <Link to={`${basePath}/orders/${o.id}`} className="font-medium text-brand-600">
+                    <Link to={`${basePath}/orders/${o.id}`} className="font-medium text-brand-600 dark:text-brand-400">
                       {o.order_number}
                     </Link>
                   ),
@@ -113,7 +113,7 @@ export function OrdersListPage() {
                 {
                   header: "Actions",
                   render: (o) => (
-                    <Link to={`${basePath}/orders/${o.id}`} className="text-sm font-medium text-brand-600 hover:underline">
+                    <Link to={`${basePath}/orders/${o.id}`} className="text-sm font-medium text-brand-600 hover:underline dark:text-brand-400">
                       View
                     </Link>
                   ),

@@ -63,8 +63,8 @@ export function OrderDetailPage() {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">Order {order.order_number}</h1>
-          <p className="text-sm text-slate-500">Placed on {formatDateTime(order.created_at)}</p>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Order {order.order_number}</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Placed on {formatDateTime(order.created_at)}</p>
         </div>
         {isStaff && (
           <Button onClick={handleCreateShipment} disabled={isCreatingShipment}>
@@ -76,34 +76,34 @@ export function OrderDetailPage() {
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <h2 className="text-sm font-semibold text-slate-900">Order Information</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Order Information</h2>
           </CardHeader>
           <CardBody className="space-y-3">
             <div className="flex justify-between text-sm">
-              <span className="text-slate-500">Order Status</span>
+              <span className="text-slate-500 dark:text-slate-400">Order Status</span>
               <Badge status={order.order_status} />
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-slate-500">Payment Status</span>
+              <span className="text-slate-500 dark:text-slate-400">Payment Status</span>
               <Badge status={order.payment_status} />
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-slate-500">Total Amount</span>
-              <span className="font-semibold text-slate-900">{formatCurrency(order.total_amount)}</span>
+              <span className="text-slate-500 dark:text-slate-400">Total Amount</span>
+              <span className="font-semibold text-slate-900 dark:text-slate-50">{formatCurrency(order.total_amount)}</span>
             </div>
 
-            <div className="border-t border-slate-100 pt-4">
-              <p className="mb-2 text-sm font-medium text-slate-700">Products</p>
+            <div className="border-t border-slate-100 pt-4 dark:border-surface-dark-border">
+              <p className="mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Products</p>
               <div className="space-y-2">
                 {order.items.map((item) => (
                   <div key={item.id} className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2 text-sm">
                     <div>
-                      <p className="font-medium text-slate-800">{item.product?.name || `Product #${item.product_id}`}</p>
-                      <p className="text-xs text-slate-500">
+                      <p className="font-medium text-slate-800 dark:text-slate-200">{item.product?.name || `Product #${item.product_id}`}</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
                         {item.quantity} × {formatCurrency(item.price)}
                       </p>
                     </div>
-                    <span className="font-medium text-slate-800">{formatCurrency(item.total)}</span>
+                    <span className="font-medium text-slate-800 dark:text-slate-200">{formatCurrency(item.total)}</span>
                   </div>
                 ))}
               </div>
@@ -114,20 +114,20 @@ export function OrderDetailPage() {
         <div className="space-y-5">
           <Card>
             <CardHeader>
-              <h2 className="text-sm font-semibold text-slate-900">Customer Information</h2>
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Customer Information</h2>
             </CardHeader>
             <CardBody className="space-y-1 text-sm">
-              <p className="font-medium text-slate-800">{order.customer?.name}</p>
-              <p className="text-slate-500">{order.customer?.email}</p>
-              <p className="text-slate-500">{order.customer?.phone}</p>
+              <p className="font-medium text-slate-800 dark:text-slate-200">{order.customer?.name}</p>
+              <p className="text-slate-500 dark:text-slate-400">{order.customer?.email}</p>
+              <p className="text-slate-500 dark:text-slate-400">{order.customer?.phone}</p>
             </CardBody>
           </Card>
 
           <Card>
             <CardHeader>
-              <h2 className="text-sm font-semibold text-slate-900">Shipping Address</h2>
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Shipping Address</h2>
             </CardHeader>
-            <CardBody className="text-sm text-slate-600">
+            <CardBody className="text-sm text-slate-600 dark:text-slate-300">
               {order.shipping_address ? (
                 <>
                   <p>{order.shipping_address.address_line1}</p>
@@ -138,16 +138,16 @@ export function OrderDetailPage() {
                   <p>{order.shipping_address.country}</p>
                 </>
               ) : (
-                <p className="text-slate-400">No shipping address on file.</p>
+                <p className="text-slate-400 dark:text-slate-500">No shipping address on file.</p>
               )}
             </CardBody>
           </Card>
 
           <Card>
             <CardHeader>
-              <h2 className="text-sm font-semibold text-slate-900">Billing Address</h2>
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Billing Address</h2>
             </CardHeader>
-            <CardBody className="text-sm text-slate-600">
+            <CardBody className="text-sm text-slate-600 dark:text-slate-300">
               {order.billing_address ? (
                 <>
                   <p>{order.billing_address.address_line1}</p>
@@ -156,7 +156,7 @@ export function OrderDetailPage() {
                   </p>
                 </>
               ) : (
-                <p className="text-slate-400">Same as shipping address.</p>
+                <p className="text-slate-400 dark:text-slate-500">Same as shipping address.</p>
               )}
             </CardBody>
           </Card>
@@ -164,9 +164,9 @@ export function OrderDetailPage() {
       </div>
 
       {isStaff && (
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           Looking for shipment status?{" "}
-          <Link to={`${basePath}/shipments`} className="font-medium text-brand-600 hover:underline">
+          <Link to={`${basePath}/shipments`} className="font-medium text-brand-600 hover:underline dark:text-brand-400">
             View all shipments
           </Link>
         </p>

@@ -32,29 +32,29 @@ export function CourierDetailPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-xl font-semibold text-slate-900">{courier.name}</h1>
-        <p className="text-sm text-slate-500">Code: {courier.code}</p>
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">{courier.name}</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Code: {courier.code}</p>
       </div>
 
       <Card className="max-w-xl">
         <CardHeader>
-          <h2 className="text-sm font-semibold text-slate-900">Courier Information</h2>
+          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Courier Information</h2>
         </CardHeader>
         <CardBody className="space-y-3 text-sm">
           <div className="flex justify-between">
-            <span className="text-slate-500">Phone</span>
-            <span className="font-medium text-slate-800">{courier.phone || "-"}</span>
+            <span className="text-slate-500 dark:text-slate-400">Phone</span>
+            <span className="font-medium text-slate-800 dark:text-slate-200">{courier.phone || "-"}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Email</span>
-            <span className="font-medium text-slate-800">{courier.email || "-"}</span>
+            <span className="text-slate-500 dark:text-slate-400">Email</span>
+            <span className="font-medium text-slate-800 dark:text-slate-200">{courier.email || "-"}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">API URL</span>
-            <span className="font-medium text-slate-800">{courier.api_url || "-"}</span>
+            <span className="text-slate-500 dark:text-slate-400">API URL</span>
+            <span className="font-medium text-slate-800 dark:text-slate-200">{courier.api_url || "-"}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Status</span>
+            <span className="text-slate-500 dark:text-slate-400">Status</span>
             <Badge status={courier.status} />
           </div>
         </CardBody>

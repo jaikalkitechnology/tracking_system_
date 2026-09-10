@@ -41,14 +41,14 @@ export function CustomersListPage() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">Customers</h1>
-          <p className="text-sm text-slate-500">Manage your customer accounts.</p>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Customers</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Manage your customer accounts.</p>
         </div>
         <Button onClick={() => setShowCreate(true)}>+ New Customer</Button>
       </div>
 
       <Card>
-        <div className="border-b border-slate-100 p-4">
+        <div className="border-b border-slate-100 p-4 dark:border-surface-dark-border">
           <Input
             placeholder="Search by name, email or code..."
             value={search}
@@ -77,7 +77,7 @@ export function CustomersListPage() {
                 {
                   header: "Customer",
                   render: (c) => (
-                    <Link to={`/customers/${c.id}`} className="font-medium text-brand-600">
+                    <Link to={`/customers/${c.id}`} className="font-medium text-brand-600 dark:text-brand-400">
                       {c.name}
                     </Link>
                   ),

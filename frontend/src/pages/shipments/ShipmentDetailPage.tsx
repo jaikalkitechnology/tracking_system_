@@ -85,56 +85,56 @@ export function ShipmentDetailPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-xl font-semibold text-slate-900">Shipment {shipment.shipment_number}</h1>
-        <p className="text-sm text-slate-500">Tracking Number: {shipment.tracking_number}</p>
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Shipment {shipment.shipment_number}</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Tracking Number: {shipment.tracking_number}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
         <Card className="lg:col-span-1">
           <CardHeader>
-            <h2 className="text-sm font-semibold text-slate-900">Shipment Details</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Shipment Details</h2>
           </CardHeader>
           <CardBody className="space-y-3 text-sm">
             <div className="flex justify-between">
-              <span className="text-slate-500">Current Status</span>
+              <span className="text-slate-500 dark:text-slate-400">Current Status</span>
               <Badge status={shipment.status} />
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Courier</span>
-              <span className="font-medium text-slate-800">{shipment.courier?.name || "-"}</span>
+              <span className="text-slate-500 dark:text-slate-400">Courier</span>
+              <span className="font-medium text-slate-800 dark:text-slate-200">{shipment.courier?.name || "-"}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Warehouse</span>
-              <span className="font-medium text-slate-800">{shipment.warehouse?.name || "-"}</span>
+              <span className="text-slate-500 dark:text-slate-400">Warehouse</span>
+              <span className="font-medium text-slate-800 dark:text-slate-200">{shipment.warehouse?.name || "-"}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Origin</span>
-              <span className="font-medium text-slate-800">{shipment.origin || "-"}</span>
+              <span className="text-slate-500 dark:text-slate-400">Origin</span>
+              <span className="font-medium text-slate-800 dark:text-slate-200">{shipment.origin || "-"}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Destination</span>
-              <span className="font-medium text-slate-800">{shipment.destination || "-"}</span>
+              <span className="text-slate-500 dark:text-slate-400">Destination</span>
+              <span className="font-medium text-slate-800 dark:text-slate-200">{shipment.destination || "-"}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Package Weight</span>
-              <span className="font-medium text-slate-800">{shipment.weight ? `${shipment.weight} kg` : "-"}</span>
+              <span className="text-slate-500 dark:text-slate-400">Package Weight</span>
+              <span className="font-medium text-slate-800 dark:text-slate-200">{shipment.weight ? `${shipment.weight} kg` : "-"}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Est. Delivery</span>
-              <span className="font-medium text-slate-800">{formatDate(shipment.estimated_delivery_date)}</span>
+              <span className="text-slate-500 dark:text-slate-400">Est. Delivery</span>
+              <span className="font-medium text-slate-800 dark:text-slate-200">{formatDate(shipment.estimated_delivery_date)}</span>
             </div>
             {shipment.actual_delivery_date && (
               <div className="flex justify-between">
-                <span className="text-slate-500">Delivered On</span>
-                <span className="font-medium text-slate-800">{formatDate(shipment.actual_delivery_date)}</span>
+                <span className="text-slate-500 dark:text-slate-400">Delivered On</span>
+                <span className="font-medium text-slate-800 dark:text-slate-200">{formatDate(shipment.actual_delivery_date)}</span>
               </div>
             )}
           </CardBody>
 
           {isStaff && (
-            <CardBody className="border-t border-slate-100">
-              <p className="mb-3 text-sm font-semibold text-slate-900">Update Status</p>
-              {error && <div className="mb-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>}
+            <CardBody className="border-t border-slate-100 dark:border-surface-dark-border">
+              <p className="mb-3 text-sm font-semibold text-slate-900 dark:text-slate-100">Update Status</p>
+              {error && <div className="mb-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-300">{error}</div>}
               <div className="space-y-3">
                 <div>
                   <Label>New Status</Label>
@@ -165,7 +165,7 @@ export function ShipmentDetailPage() {
 
         <Card className="lg:col-span-2">
           <CardHeader>
-            <h2 className="text-sm font-semibold text-slate-900">Tracking Timeline</h2>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Tracking Timeline</h2>
           </CardHeader>
           <CardBody>
             <Timeline events={shipment.tracking_events} />

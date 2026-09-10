@@ -33,31 +33,31 @@ export function ProductDetailPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-xl font-semibold text-slate-900">{product.name}</h1>
-        <p className="text-sm text-slate-500">SKU: {product.sku}</p>
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">{product.name}</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400">SKU: {product.sku}</p>
       </div>
 
       <Card className="max-w-xl">
         <CardHeader>
-          <h2 className="text-sm font-semibold text-slate-900">Product Information</h2>
+          <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Product Information</h2>
         </CardHeader>
         <CardBody className="space-y-3 text-sm">
-          {product.description && <p className="text-slate-600">{product.description}</p>}
+          {product.description && <p className="text-slate-600 dark:text-slate-300">{product.description}</p>}
           <div className="flex justify-between">
-            <span className="text-slate-500">Price</span>
-            <span className="font-medium text-slate-800">{formatCurrency(product.price)}</span>
+            <span className="text-slate-500 dark:text-slate-400">Price</span>
+            <span className="font-medium text-slate-800 dark:text-slate-200">{formatCurrency(product.price)}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Weight</span>
-            <span className="font-medium text-slate-800">{product.weight ? `${product.weight} kg` : "-"}</span>
+            <span className="text-slate-500 dark:text-slate-400">Weight</span>
+            <span className="font-medium text-slate-800 dark:text-slate-200">{product.weight ? `${product.weight} kg` : "-"}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Status</span>
+            <span className="text-slate-500 dark:text-slate-400">Status</span>
             <Badge status={product.status} />
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Added</span>
-            <span className="font-medium text-slate-800">{formatDate(product.created_at)}</span>
+            <span className="text-slate-500 dark:text-slate-400">Added</span>
+            <span className="font-medium text-slate-800 dark:text-slate-200">{formatDate(product.created_at)}</span>
           </div>
         </CardBody>
       </Card>
