@@ -25,9 +25,9 @@ export function CustomerLayout() {
       <header className="flex h-16 items-center justify-between border-b border-slate-200 bg-white px-5 dark:border-surface-dark-border dark:bg-surface-dark-subtle">
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
-            T
+            V
           </div>
-          <span className="text-lg font-bold text-slate-900 dark:text-slate-50">TrackSuite</span>
+          <span className="text-lg font-bold text-slate-900 dark:text-slate-50">Vastraliya</span>
         </div>
         <nav className="hidden gap-1 sm:flex">
           {NAV_ITEMS.map((item) => (

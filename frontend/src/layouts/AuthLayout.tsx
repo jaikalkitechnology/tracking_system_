@@ -12,9 +12,9 @@ export function AuthLayout() {
 
         <div className="relative flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/15 text-sm font-bold backdrop-blur">
-            T
+            V
           </div>
-          <span className="text-xl font-bold">TrackSuite</span>
+          <span className="text-xl font-bold">Vastraliya</span>
         </div>
 
         <div className="relative space-y-6">
@@ -39,7 +39,7 @@ export function AuthLayout() {
           </div>
         </div>
 
-        <p className="relative text-xs text-white/50">E-Commerce Tracking System</p>
+        <p className="relative text-xs text-white/50">Vastraliya Tracking System</p>
       </div>
 
       <div className="flex w-full flex-col lg:w-1/2">
@@ -49,8 +49,8 @@ export function AuthLayout() {
         <div className="flex flex-1 items-center justify-center px-4 pb-16">
           <div className="w-full max-w-sm">
             <div className="mb-6 text-center lg:hidden">
-              <span className="text-2xl font-bold text-brand-700 dark:text-brand-400">TrackSuite</span>
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">E-Commerce Tracking System</p>
+              <span className="text-2xl font-bold text-brand-700 dark:text-brand-400">Vastraliya</span>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Vastraliya Tracking System</p>
             </div>
             <Outlet />
           </div>
