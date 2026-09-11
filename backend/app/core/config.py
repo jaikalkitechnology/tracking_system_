@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
-    APP_NAME: str = "E-Commerce Tracking System"
+    APP_NAME: str = "Vastraliya Tracking System"
     APP_ENV: str = "development"
 
     DATABASE_URL: str = "mysql+pymysql://root:password@localhost:3306/ecommerce_tracking"

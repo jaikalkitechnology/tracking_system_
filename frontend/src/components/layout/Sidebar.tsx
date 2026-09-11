@@ -43,9 +43,9 @@ export function Sidebar() {
     <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white dark:border-surface-dark-border dark:bg-surface-dark-subtle md:flex">
       <div className="flex h-16 items-center gap-2 border-b border-slate-100 px-5 dark:border-surface-dark-border">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
-          T
+          V
         </div>
-        <span className="text-lg font-bold text-slate-900 dark:text-slate-50">TrackSuite</span>
+        <span className="text-lg font-bold text-slate-900 dark:text-slate-50">Vastraliya</span>
       </div>
       <nav className="flex-1 space-y-1 overflow-y-auto p-3">
         {items.map((item) => (

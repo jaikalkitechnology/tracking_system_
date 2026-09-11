@@ -1,4 +1,4 @@
-# E-Commerce Tracking System
+# Vastraliya Tracking System
 
 A full-stack order & shipment tracking platform: an admin dashboard for staff and a public tracking page + customer portal, backed by a FastAPI + MySQL API.
 
