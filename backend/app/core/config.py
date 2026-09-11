@@ -16,7 +16,10 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
-    FRONTEND_URL: str = "http://localhost:5173"
+    # Hardcoded default so CORS works in production even if FRONTEND_URL is
+    # never set as an environment variable on the server. Override via the
+    # FRONTEND_URL env var (comma-separated for multiple origins) if needed.
+    FRONTEND_URL: str = "https://tracking.vastraliya.com,http://localhost:5173"
 
     @property
     def is_production(self) -> bool:
