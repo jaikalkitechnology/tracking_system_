@@ -39,7 +39,7 @@ ecommerce-tracking-system/
 ## Quick start (Docker)
 
 ```bash
-cp .env.example .env   # optional: override MySQL/JWT defaults
+cp .env .env   # optional: override MySQL/JWT defaults
 docker compose up --build
 ```
 
@@ -64,7 +64,7 @@ CREATE DATABASE ecommerce_tracking;
 cd backend
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env   # point DATABASE_URL at your MySQL instance
+cp .env .env   # point DATABASE_URL at your MySQL instance
 alembic upgrade head
 python -m app.seed
 uvicorn app.main:app --reload
@@ -75,7 +75,7 @@ uvicorn app.main:app --reload
 ```bash
 cd frontend
 npm install
-cp .env.example .env
+cp .env .env
 npm run dev
 ```
 
@@ -83,7 +83,7 @@ Visit http://localhost:5173. API docs are at http://localhost:8000/docs.
 
 ## Environment variables
 
-See `backend/.env.example` and `frontend/.env.example`. Never commit real `.env` files — `DATABASE_URL` credentials, `JWT_SECRET`, and courier `api_key` values must stay server-side and out of version control.
+See `backend/.env` and `frontend/.env.example`. Never commit real `.env` files — `DATABASE_URL` credentials, `JWT_SECRET`, and courier `api_key` values must stay server-side and out of version control.
 
 ## Seed data / demo logins
 

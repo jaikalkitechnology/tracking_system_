@@ -9,7 +9,7 @@ cd backend
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-cp .env.example .env        # then edit DATABASE_URL / JWT_SECRET
+cp .env .env        # then edit DATABASE_URL / JWT_SECRET
 ```
 
 Make sure MySQL 8 is running and the database in `DATABASE_URL` exists:

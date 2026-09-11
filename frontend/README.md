@@ -7,7 +7,7 @@ React + Vite + TypeScript + Tailwind CSS + Axios + React Router + Recharts.
 ```bash
 cd frontend
 npm install
-cp .env.example .env   # set VITE_API_BASE_URL if the backend isn't on localhost:8000
+cp .env .env   # set VITE_API_BASE_URL if the backend isn't on localhost:8000
 ```
 
 ## Run
