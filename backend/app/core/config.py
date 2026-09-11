@@ -22,6 +22,12 @@ class Settings(BaseSettings):
     def is_production(self) -> bool:
         return self.APP_ENV.lower() == "production"
 
+    @property
+    def cors_origins(self) -> list[str]:
+        """FRONTEND_URL may be a single origin or a comma-separated list, e.g.
+        "https://tracking.example.com,http://localhost:5173"."""
+        return [origin.strip() for origin in self.FRONTEND_URL.split(",") if origin.strip()]
+
 
 @lru_cache
 def get_settings() -> Settings:
