@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/Input";
 import { LoadingState } from "@/components/ui/Spinner";
 import { Pagination } from "@/components/ui/Pagination";
 import { DataTable } from "@/components/tables/DataTable";
+import { StatCard } from "@/components/charts/StatCard";
+import { IconAlertTriangle, IconPackageCheck, IconProducts, IconSearch } from "@/components/ui/icons";
 import { CreateProductModal } from "@/pages/products/CreateProductModal";
 import { useAuth } from "@/context/AuthContext";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
@@ -28,6 +30,7 @@ export function ProductsListPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
+  const [counts, setCounts] = useState<Record<string, number> | null>(null);
 
   const load = () => {
     setIsLoading(true);
@@ -41,27 +44,52 @@ export function ProductsListPage() {
 
   useEffect(load, [page, debouncedSearch]);
 
+  useEffect(() => {
+    Promise.all([
+      productsApi.list({ limit: 1 }),
+      productsApi.list({ limit: 1, status: "ACTIVE" }),
+      productsApi.list({ limit: 1, status: "DISCONTINUED" }),
+    ])
+      .then(([all, active, discontinued]) =>
+        setCounts({ total: all.total, active: active.total, discontinued: discontinued.total })
+      )
+      .catch(() => setCounts(null));
+  }, []);
+
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Products</h1>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Products</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">Manage your product catalog.</p>
         </div>
         {isStaff && <Button onClick={() => setShowCreate(true)}>+ New Product</Button>}
       </div>
 
+      {counts && (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <StatCard label="Total Products" value={counts.total} icon={<IconProducts />} tone="brand" />
+          <StatCard label="Active" value={counts.active} icon={<IconPackageCheck />} tone="emerald" />
+          <StatCard label="Discontinued" value={counts.discontinued} icon={<IconAlertTriangle />} tone="red" />
+        </div>
+      )}
+
       <Card>
         <div className="border-b border-slate-100 p-4 dark:border-surface-dark-border">
-          <Input
-            placeholder="Search by name or SKU..."
-            value={search}
-            onChange={(e) => {
-              setPage(1);
-              setSearch(e.target.value);
-            }}
-            className="max-w-xs"
-          />
+          <div className="relative max-w-xs">
+            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500">
+              <IconSearch className="h-4 w-4" />
+            </span>
+            <Input
+              placeholder="Search by name or SKU..."
+              value={search}
+              onChange={(e) => {
+                setPage(1);
+                setSearch(e.target.value);
+              }}
+              className="pl-9"
+            />
+          </div>
         </div>
 
         {isLoading ? (
