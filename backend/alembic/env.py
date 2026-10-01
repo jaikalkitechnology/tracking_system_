@@ -8,7 +8,14 @@ from app.database.base import Base
 from app.models import *  # noqa: F401,F403  (registers all models on Base.metadata)
 
 config = context.config
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+# alembic.ini is read by configparser, which treats "%" as the start of an
+# interpolation sequence (e.g. "%(name)s"). A DATABASE_URL containing a
+# literal "%" (from URL-encoding a special character in the password, e.g.
+# "%40" for "@") must have it escaped as "%%" or configparser raises
+# "invalid interpolation syntax". This does not affect the actual URL value
+# used for the connection - config.get_main_option()/get_section() below
+# un-escape "%%" back to "%" when read.
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL.replace("%", "%%"))
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)

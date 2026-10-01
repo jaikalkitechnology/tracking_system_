@@ -53,9 +53,9 @@ export function PublicTrackingPage() {
         <div className="mb-8 text-center">
           <Link to="/" className="inline-flex items-center gap-2 text-2xl font-bold text-brand-700 dark:text-brand-400">
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
-              T
+              V
             </span>
-            TrackSuite
+            Vastraliya
           </Link>
           <h1 className="mt-5 text-2xl font-bold text-slate-900 dark:text-slate-50 sm:text-3xl">Track Your Order</h1>
           <p className="mt-2 text-slate-500 dark:text-slate-400">
