@@ -8,7 +8,7 @@ import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { ErrorState } from "@/components/ui/EmptyState";
 import { LoadingState } from "@/components/ui/Spinner";
 import { CustomerDetail } from "@/types";
-import { formatDate } from "@/utils/format";
+import { formatCurrency, formatDate } from "@/utils/format";
 
 export function CustomerDetailPage() {
   const { id } = useParams();
@@ -35,6 +35,17 @@ export function CustomerDetailPage() {
       <div>
         <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">{customer.name}</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">Customer Code: {customer.customer_code}</p>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-2">
+        <Card className="p-5">
+          <p className="text-sm text-slate-500 dark:text-slate-400">Total Orders</p>
+          <p className="mt-1 text-2xl font-bold text-slate-900 dark:text-slate-50">{customer.total_orders}</p>
+        </Card>
+        <Card className="p-5">
+          <p className="text-sm text-slate-500 dark:text-slate-400">Total Spent</p>
+          <p className="mt-1 text-2xl font-bold text-slate-900 dark:text-slate-50">{formatCurrency(customer.total_spent)}</p>
+        </Card>
       </div>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">

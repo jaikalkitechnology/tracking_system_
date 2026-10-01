@@ -46,6 +46,8 @@ export interface Customer {
   status: CustomerStatus;
   created_at: string;
   updated_at: string;
+  total_orders: number;
+  total_spent: number;
 }
 
 export interface CustomerDetail extends Customer {

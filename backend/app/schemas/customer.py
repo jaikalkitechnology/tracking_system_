@@ -31,6 +31,8 @@ class CustomerResponse(CustomerBase):
     status: CustomerStatus
     created_at: datetime
     updated_at: datetime
+    total_orders: int = 0
+    total_spent: float = 0
 
 
 class CustomerDetailResponse(CustomerResponse):
