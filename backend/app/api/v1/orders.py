@@ -57,6 +57,7 @@ def _get_order_or_404(order_id: int, db: Session, current_user: User) -> Order:
         joinedload(Order.billing_address),
         joinedload(Order.items),
         joinedload(Order.created_by),
+        joinedload(Order.shipments),
     )
     order = query.filter(Order.id == order_id).first()
     if not order:
