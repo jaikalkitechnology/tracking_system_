@@ -3,20 +3,26 @@ import { useParams } from "react-router-dom";
 
 import { getApiErrorMessage } from "@/api/axios";
 import { customersApi } from "@/api/customers";
+import { AddAddressModal } from "@/pages/customers/AddAddressModal";
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { ErrorState } from "@/components/ui/EmptyState";
 import { LoadingState } from "@/components/ui/Spinner";
+import { useAuth } from "@/context/AuthContext";
 import { CustomerDetail } from "@/types";
 import { formatCurrency, formatDate } from "@/utils/format";
 
 export function CustomerDetailPage() {
   const { id } = useParams();
+  const { user } = useAuth();
+  const isStaff = user && user.role !== "CUSTOMER";
   const [customer, setCustomer] = useState<CustomerDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showAddAddress, setShowAddAddress] = useState(false);
 
-  useEffect(() => {
+  const load = () => {
     if (!id) return;
     setIsLoading(true);
     customersApi
@@ -24,7 +30,9 @@ export function CustomerDetailPage() {
       .then(setCustomer)
       .catch((err) => setError(getApiErrorMessage(err)))
       .finally(() => setIsLoading(false));
-  }, [id]);
+  };
+
+  useEffect(load, [id]);
 
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState message={error} />;
@@ -74,8 +82,13 @@ export function CustomerDetailPage() {
         </Card>
 
         <Card>
-          <CardHeader>
+          <CardHeader className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Addresses</h2>
+            {isStaff && (
+              <Button variant="secondary" onClick={() => setShowAddAddress(true)}>
+                + Add Address
+              </Button>
+            )}
           </CardHeader>
           <CardBody className="space-y-3">
             {customer.addresses.length === 0 ? (
@@ -95,6 +108,17 @@ export function CustomerDetailPage() {
           </CardBody>
         </Card>
       </div>
+
+      {showAddAddress && (
+        <AddAddressModal
+          customerId={customer.id}
+          onClose={() => setShowAddAddress(false)}
+          onCreated={() => {
+            setShowAddAddress(false);
+            load();
+          }}
+        />
+      )}
     </div>
   );
 }
