@@ -14,6 +14,11 @@ class PaymentStatus(str, enum.Enum):
     REFUNDED = "REFUNDED"
 
 
+class PaymentMethod(str, enum.Enum):
+    ONLINE = "ONLINE"
+    COD = "COD"
+
+
 class OrderStatus(str, enum.Enum):
     PENDING = "PENDING"
     CONFIRMED = "CONFIRMED"
@@ -30,6 +35,7 @@ class Order(TimestampMixin, Base):
     customer_id: Mapped[int] = mapped_column(ForeignKey("customers.id"), index=True, nullable=False)
     total_amount: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False, default=0)
     payment_status: Mapped[PaymentStatus] = mapped_column(Enum(PaymentStatus), default=PaymentStatus.PENDING, nullable=False)
+    payment_method: Mapped[PaymentMethod] = mapped_column(Enum(PaymentMethod), default=PaymentMethod.ONLINE, nullable=False)
     order_status: Mapped[OrderStatus] = mapped_column(Enum(OrderStatus), default=OrderStatus.PENDING, nullable=False, index=True)
     shipping_address_id: Mapped[int | None] = mapped_column(ForeignKey("addresses.id"), nullable=True)
     billing_address_id: Mapped[int | None] = mapped_column(ForeignKey("addresses.id"), nullable=True)

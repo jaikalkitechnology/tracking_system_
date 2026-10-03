@@ -139,6 +139,7 @@ export function OrdersListPage() {
                 },
                 { header: "Amount", render: (o) => formatCurrency(o.total_amount) },
                 { header: "Payment", render: (o) => <Badge status={o.payment_status} /> },
+                { header: "Method", render: (o) => (o.payment_method === "COD" ? "COD" : "Online") },
                 { header: "Status", render: (o) => <Badge status={o.order_status} /> },
                 { header: "Created", render: (o) => formatDate(o.created_at) },
                 {

@@ -18,6 +18,7 @@ export function CreateOrderModal({ onClose, onCreated }: { onClose: () => void; 
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [customerId, setCustomerId] = useState<number | "">("");
+  const [paymentMethod, setPaymentMethod] = useState<"ONLINE" | "COD">("ONLINE");
   const [items, setItems] = useState<LineItem[]>([{ product_id: 0, quantity: 1 }]);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -44,7 +45,7 @@ export function CreateOrderModal({ onClose, onCreated }: { onClose: () => void; 
     }
     setIsSubmitting(true);
     try {
-      await ordersApi.create({ customer_id: Number(customerId), items: validItems });
+      await ordersApi.create({ customer_id: Number(customerId), payment_method: paymentMethod, items: validItems });
       onCreated();
     } catch (err) {
       setError(getApiErrorMessage(err));
@@ -82,6 +83,30 @@ export function CreateOrderModal({ onClose, onCreated }: { onClose: () => void; 
               </option>
             ))}
           </Select>
+        </div>
+
+        <div>
+          <Label>Payment Method</Label>
+          <div className="flex gap-4">
+            <label className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+              <input
+                type="radio"
+                name="payment_method"
+                checked={paymentMethod === "ONLINE"}
+                onChange={() => setPaymentMethod("ONLINE")}
+              />
+              Online
+            </label>
+            <label className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+              <input
+                type="radio"
+                name="payment_method"
+                checked={paymentMethod === "COD"}
+                onChange={() => setPaymentMethod("COD")}
+              />
+              Cash on Delivery (COD)
+            </label>
+          </div>
         </div>
 
         <div>

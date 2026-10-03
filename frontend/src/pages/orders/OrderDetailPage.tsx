@@ -140,6 +140,9 @@ export function OrderDetailPage() {
         <div className="flex items-center gap-2">
           <Badge status={order.order_status} />
           <Badge status={order.payment_status} />
+          <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 dark:bg-white/10 dark:text-slate-300">
+            {order.payment_method === "COD" ? "Cash on Delivery" : "Online Payment"}
+          </span>
           <span className="text-lg font-bold text-slate-900 dark:text-slate-50">{formatCurrency(order.total_amount)}</span>
         </div>
       </div>
