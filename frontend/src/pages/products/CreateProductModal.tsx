@@ -7,7 +7,16 @@ import { Input, Label } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
 
 export function CreateProductModal({ onClose, onCreated }: { onClose: () => void; onCreated: () => void }) {
-  const [form, setForm] = useState({ sku: "", name: "", description: "", price: "", weight: "" });
+  const [form, setForm] = useState({
+    sku: "",
+    name: "",
+    description: "",
+    category: "",
+    price: "",
+    weight: "",
+    stock_quantity: "0",
+    low_stock_threshold: "5",
+  });
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -19,12 +28,17 @@ export function CreateProductModal({ onClose, onCreated }: { onClose: () => void
     }
     setIsSubmitting(true);
     try {
+      const stockQuantity = Number(form.stock_quantity);
+      const lowStockThreshold = Number(form.low_stock_threshold);
       await productsApi.create({
         sku: form.sku,
         name: form.name,
         description: form.description || undefined,
+        category: form.category || undefined,
         price: Number(form.price),
         weight: form.weight ? Number(form.weight) : undefined,
+        stock_quantity: Number.isFinite(stockQuantity) ? stockQuantity : 0,
+        low_stock_threshold: Number.isFinite(lowStockThreshold) ? lowStockThreshold : 5,
       });
       onCreated();
     } catch (err) {
@@ -52,9 +66,19 @@ export function CreateProductModal({ onClose, onCreated }: { onClose: () => void
     >
       <div className="space-y-4">
         {error && <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-300">{error}</div>}
-        <div>
-          <Label>SKU</Label>
-          <Input value={form.sku} onChange={(e) => setForm({ ...form, sku: e.target.value })} />
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <Label>SKU</Label>
+            <Input value={form.sku} onChange={(e) => setForm({ ...form, sku: e.target.value })} />
+          </div>
+          <div>
+            <Label>Category</Label>
+            <Input
+              placeholder="e.g. Apparel"
+              value={form.category}
+              onChange={(e) => setForm({ ...form, category: e.target.value })}
+            />
+          </div>
         </div>
         <div>
           <Label>Name</Label>
@@ -72,6 +96,26 @@ export function CreateProductModal({ onClose, onCreated }: { onClose: () => void
           <div>
             <Label>Weight (kg)</Label>
             <Input type="number" min={0} step="0.01" value={form.weight} onChange={(e) => setForm({ ...form, weight: e.target.value })} />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <Label>Stock Quantity</Label>
+            <Input
+              type="number"
+              min={0}
+              value={form.stock_quantity}
+              onChange={(e) => setForm({ ...form, stock_quantity: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label>Low Stock Alert</Label>
+            <Input
+              type="number"
+              min={0}
+              value={form.low_stock_threshold}
+              onChange={(e) => setForm({ ...form, low_stock_threshold: e.target.value })}
+            />
           </div>
         </div>
       </div>

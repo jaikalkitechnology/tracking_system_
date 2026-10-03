@@ -46,6 +46,8 @@ export interface Customer {
   status: CustomerStatus;
   created_at: string;
   updated_at: string;
+  total_orders: number;
+  total_spent: number;
 }
 
 export interface CustomerDetail extends Customer {
@@ -53,15 +55,20 @@ export interface CustomerDetail extends Customer {
 }
 
 export type ProductStatus = "ACTIVE" | "INACTIVE" | "DISCONTINUED";
+export type StockStatus = "IN_STOCK" | "LOW_STOCK" | "OUT_OF_STOCK";
 
 export interface Product {
   id: number;
   sku: string;
   name: string;
   description: string | null;
+  category: string | null;
   price: number;
   weight: number | null;
+  stock_quantity: number;
+  low_stock_threshold: number;
   status: ProductStatus;
+  stock_status: StockStatus;
   created_at: string;
   updated_at: string;
 }
