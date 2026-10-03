@@ -278,9 +278,24 @@ export function OrderDetailPage() {
                     Mark as {advanceTo.charAt(0) + advanceTo.slice(1).toLowerCase()}
                   </Button>
                 )}
-                <Button className="w-full" onClick={handleCreateShipment} disabled={isCreatingShipment}>
-                  {isCreatingShipment ? "Creating shipment..." : "Create Shipment"}
-                </Button>
+                {order.shipments.length > 0 ? (
+                  <div className="rounded-lg bg-slate-50 p-3 text-sm dark:bg-white/5">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Tracking Number</p>
+                    <p className="font-mono font-semibold text-slate-900 dark:text-slate-50">
+                      {order.shipments[0].tracking_number}
+                    </p>
+                    <Link
+                      to={`/shipments/${order.shipments[0].id}`}
+                      className="mt-1 inline-block text-sm font-medium text-brand-600 hover:underline dark:text-brand-400"
+                    >
+                      View Shipment
+                    </Link>
+                  </div>
+                ) : (
+                  <Button className="w-full" onClick={handleCreateShipment} disabled={isCreatingShipment}>
+                    {isCreatingShipment ? "Creating shipment..." : "Create Shipment"}
+                  </Button>
+                )}
                 {order.order_status !== "CANCELLED" && order.order_status !== "COMPLETED" && (
                   <Button
                     className="w-full"

@@ -3,6 +3,7 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.models.order import OrderStatus, PaymentMethod, PaymentStatus
+from app.models.shipment import ShipmentStatus
 from app.schemas.address import AddressResponse
 from app.schemas.customer import CustomerResponse
 from app.schemas.product import ProductResponse
@@ -13,6 +14,15 @@ class OrderCreatorResponse(BaseModel):
 
     id: int
     name: str
+
+
+class OrderShipmentSummary(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    shipment_number: str
+    tracking_number: str
+    status: ShipmentStatus
 
 
 class OrderItemCreate(BaseModel):
@@ -69,3 +79,4 @@ class OrderDetailResponse(OrderResponse):
     shipping_address: AddressResponse | None = None
     billing_address: AddressResponse | None = None
     items: list[OrderItemResponse] = []
+    shipments: list[OrderShipmentSummary] = []

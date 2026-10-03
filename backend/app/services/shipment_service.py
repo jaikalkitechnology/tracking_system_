@@ -23,6 +23,10 @@ def generate_tracking_number() -> str:
 
 
 def create_shipment(db: Session, order: Order, payload: ShipmentCreate) -> Shipment:
+    existing = db.query(Shipment).filter(Shipment.order_id == order.id).first()
+    if existing:
+        return existing
+
     tracking_number = generate_tracking_number()
     while db.query(Shipment).filter(Shipment.tracking_number == tracking_number).first():
         tracking_number = generate_tracking_number()

@@ -106,11 +106,19 @@ export interface Order {
   updated_at: string;
 }
 
+export interface OrderShipmentSummary {
+  id: number;
+  shipment_number: string;
+  tracking_number: string;
+  status: ShipmentStatus;
+}
+
 export interface OrderDetail extends Order {
   customer?: Customer | null;
   shipping_address?: Address | null;
   billing_address?: Address | null;
   items: OrderItem[];
+  shipments: OrderShipmentSummary[];
 }
 
 export type ShipmentStatus =
