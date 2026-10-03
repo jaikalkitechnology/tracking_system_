@@ -6,6 +6,7 @@ from app.core.permissions import get_current_user, require_staff
 from app.database.database import get_db
 from app.models.customer import Customer
 from app.models.order import Order
+from app.models.order_item import OrderItem
 from app.models.shipment import Shipment
 from app.models.user import User, UserRole
 from app.schemas.shipment import ShipmentCreate, ShipmentDetailResponse, ShipmentResponse, ShipmentStatusUpdate, ShipmentUpdate
@@ -17,13 +18,20 @@ from app.utils.response import AppError
 router = APIRouter(prefix="/shipments", tags=["Shipments"])
 
 
-def _scope_to_customer_if_needed(query, current_user: User, db: Session):
+def _join_order_once(query, order_joined: bool):
+    if order_joined:
+        return query, True
+    return query.join(Order, Shipment.order_id == Order.id), True
+
+
+def _scope_to_customer_if_needed(query, current_user: User, db: Session, order_joined: bool):
     if current_user.role == UserRole.CUSTOMER:
         customer = db.query(Customer).filter(Customer.user_id == current_user.id).first()
         if not customer:
-            return query.filter(False)
-        return query.join(Order, Shipment.order_id == Order.id).filter(Order.customer_id == customer.id)
-    return query
+            return query.filter(False), order_joined
+        query, order_joined = _join_order_once(query, order_joined)
+        return query.filter(Order.customer_id == customer.id), order_joined
+    return query, order_joined
 
 
 @router.get("", response_model=PaginatedResponse[ShipmentResponse])
@@ -34,21 +42,27 @@ def list_shipments(
     status: str | None = Query(None),
     courier_id: int | None = Query(None),
     warehouse_id: int | None = Query(None),
+    payment_method: str | None = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
     query = select(Shipment)
+    order_joined = False
     if tracking_number:
         query = query.filter(Shipment.tracking_number.ilike(f"%{tracking_number}%"))
     if order_number:
-        query = query.join(Order, Shipment.order_id == Order.id).filter(Order.order_number.ilike(f"%{order_number}%"))
+        query, order_joined = _join_order_once(query, order_joined)
+        query = query.filter(Order.order_number.ilike(f"%{order_number}%"))
     if status:
         query = query.filter(Shipment.status == status)
     if courier_id:
         query = query.filter(Shipment.courier_id == courier_id)
     if warehouse_id:
         query = query.filter(Shipment.warehouse_id == warehouse_id)
-    query = _scope_to_customer_if_needed(query, current_user, db)
+    if payment_method:
+        query, order_joined = _join_order_once(query, order_joined)
+        query = query.filter(Order.payment_method == payment_method)
+    query, order_joined = _scope_to_customer_if_needed(query, current_user, db, order_joined)
     query = query.order_by(Shipment.created_at.desc())
     return paginate(db, query, pagination, ShipmentResponse)
 
@@ -64,7 +78,12 @@ def create_shipment_endpoint(payload: ShipmentCreate, db: Session = Depends(get_
 def _get_shipment_or_404(shipment_id: int, db: Session, current_user: User) -> Shipment:
     shipment = (
         db.query(Shipment)
-        .options(joinedload(Shipment.courier), joinedload(Shipment.warehouse), joinedload(Shipment.tracking_events))
+        .options(
+            joinedload(Shipment.courier),
+            joinedload(Shipment.warehouse),
+            joinedload(Shipment.tracking_events),
+            joinedload(Shipment.order).joinedload(Order.items).joinedload(OrderItem.product),
+        )
         .filter(Shipment.id == shipment_id)
         .first()
     )

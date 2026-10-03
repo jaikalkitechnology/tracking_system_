@@ -9,6 +9,7 @@ export interface ShipmentListParams {
   status?: string;
   courier_id?: number;
   warehouse_id?: number;
+  payment_method?: string;
 }
 
 export const shipmentsApi = {

@@ -1,21 +1,33 @@
 """Create (or promote) an admin user.
 
-Usage (interactive, prompts for anything not passed as a flag):
-    python -m app.create_admin
+Usage (interactive, prompts for anything not passed as a flag) - run it
+directly, from any directory:
+    python create_admin.py
 
 Usage (non-interactive, e.g. scripted on a server):
-    python -m app.create_admin --name "Vikas" --email admin@vastraliya.com \
+    python create_admin.py --name "Vikas" --email admin@vastraliya.com \
         --password "StrongPassword@123" --role ADMIN
+
+(Also works the old way, run as a module from the `backend` directory:
+`python -m app.create_admin`.)
 
 If the email already exists, the existing user is promoted/updated instead
 of failing with a duplicate-email error.
 """
 import argparse
 import getpass
+import sys
+from pathlib import Path
 
-from app.core.security import hash_password
-from app.database.database import SessionLocal
-from app.models.user import User, UserRole, UserStatus
+# Allow `python create_admin.py` to be run directly (from any working
+# directory) by putting the `backend` folder - the parent of this file's
+# `app` package - on sys.path, the same place `python -m app.create_admin`
+# would already find it from.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from app.core.security import hash_password  # noqa: E402
+from app.database.database import SessionLocal  # noqa: E402
+from app.models.user import User, UserRole, UserStatus  # noqa: E402
 
 
 def create_admin(name: str, email: str, password: str, phone: str | None, role: UserRole) -> None:

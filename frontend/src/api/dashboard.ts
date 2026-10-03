@@ -1,5 +1,5 @@
 import api from "./axios";
-import { DashboardSummary, Order, Shipment } from "@/types";
+import { DashboardSummary, Order, RecentActivity, Shipment } from "@/types";
 
 export interface ShipmentStatistic {
   status: string;
@@ -19,4 +19,6 @@ export const dashboardApi = {
   recentOrders: (limit = 10) => api.get<Order[]>("/dashboard/recent-orders", { params: { limit } }).then((r) => r.data),
   recentShipments: (limit = 10) =>
     api.get<Shipment[]>("/dashboard/recent-shipments", { params: { limit } }).then((r) => r.data),
+  recentActivity: (limit = 10) =>
+    api.get<RecentActivity[]>("/dashboard/recent-activity", { params: { limit } }).then((r) => r.data),
 };

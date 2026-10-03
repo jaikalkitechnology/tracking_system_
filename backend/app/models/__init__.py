@@ -4,8 +4,9 @@ from app.models.customer import Customer
 from app.models.notification import Notification
 from app.models.order import Order
 from app.models.order_item import OrderItem
-from app.models.product import Product
+from app.models.product import Product, ProductImage
 from app.models.shipment import Shipment
+from app.models.store_settings import StoreSettings
 from app.models.tracking_event import TrackingEvent
 from app.models.user import User
 from app.models.warehouse import Warehouse
@@ -18,7 +19,9 @@ __all__ = [
     "Order",
     "OrderItem",
     "Product",
+    "ProductImage",
     "Shipment",
+    "StoreSettings",
     "TrackingEvent",
     "User",
     "Warehouse",

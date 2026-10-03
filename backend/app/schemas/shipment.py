@@ -4,6 +4,7 @@ from pydantic import BaseModel, ConfigDict
 
 from app.models.shipment import ShipmentStatus
 from app.schemas.courier import CourierResponse
+from app.schemas.order import OrderItemResponse
 from app.schemas.tracking import TrackingEventResponse
 from app.schemas.warehouse import WarehouseResponse
 
@@ -60,7 +61,23 @@ class ShipmentResponse(BaseModel):
     updated_at: datetime
 
 
+class ShipmentOrderSummary(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    order_number: str
+    subtotal_amount: float
+    shipping_amount: float
+    discount_amount: float
+    tax_amount: float
+    total_amount: float
+    payment_status: str
+    payment_method: str
+    items: list[OrderItemResponse] = []
+
+
 class ShipmentDetailResponse(ShipmentResponse):
     courier: CourierResponse | None = None
     warehouse: WarehouseResponse | None = None
     tracking_events: list[TrackingEventResponse] = []
+    order: ShipmentOrderSummary | None = None

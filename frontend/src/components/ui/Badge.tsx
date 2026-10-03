@@ -12,6 +12,10 @@ const STATUS_COLORS: Record<string, string> = {
   COMPLETED: "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300",
   PAID: "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300",
   ACTIVE: "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300",
+  IN_STOCK: "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300",
+  LOW_STOCK: "bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300",
+  OUT_OF_STOCK: "bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-300",
+  DISCONTINUED: "bg-slate-200 text-slate-700 dark:bg-white/10 dark:text-slate-300",
   DELIVERY_FAILED: "bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-300",
   FAILED: "bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-300",
   CANCELLED: "bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-300",
@@ -38,6 +42,10 @@ const DOT_COLORS: Record<string, string> = {
   COMPLETED: "bg-emerald-500",
   PAID: "bg-emerald-500",
   ACTIVE: "bg-emerald-500",
+  IN_STOCK: "bg-emerald-500",
+  LOW_STOCK: "bg-amber-500",
+  OUT_OF_STOCK: "bg-red-500",
+  DISCONTINUED: "bg-slate-400",
   DELIVERY_FAILED: "bg-red-500",
   FAILED: "bg-red-500",
   CANCELLED: "bg-red-500",
@@ -50,7 +58,8 @@ const DOT_COLORS: Record<string, string> = {
   REFUNDED: "bg-slate-400",
 };
 
-export function Badge({ status }: { status: string }) {
+export function Badge({ status }: { status: string | null | undefined }) {
+  if (!status) return null;
   const classes = STATUS_COLORS[status] || "bg-slate-100 text-slate-700 dark:bg-white/10 dark:text-slate-300";
   const dot = DOT_COLORS[status] || "bg-slate-400";
   return (

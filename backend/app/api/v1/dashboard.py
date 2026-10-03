@@ -10,7 +10,14 @@ from app.models.order import Order
 from app.models.user import User
 from app.schemas.order import OrderResponse
 from app.schemas.shipment import ShipmentResponse
-from app.services.dashboard_service import get_recent_orders, get_recent_shipments, get_shipment_statistics, get_summary
+from app.schemas.tracking import RecentActivityResponse
+from app.services.dashboard_service import (
+    get_recent_activity,
+    get_recent_orders,
+    get_recent_shipments,
+    get_shipment_statistics,
+    get_summary,
+)
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
@@ -46,3 +53,20 @@ def recent_orders(limit: int = 10, db: Session = Depends(get_db), _staff: User =
 @router.get("/recent-shipments", response_model=list[ShipmentResponse])
 def recent_shipments(limit: int = 10, db: Session = Depends(get_db), _staff: User = Depends(require_staff)):
     return get_recent_shipments(db, limit)
+
+
+@router.get("/recent-activity", response_model=list[RecentActivityResponse])
+def recent_activity(limit: int = 10, db: Session = Depends(get_db), _staff: User = Depends(require_staff)):
+    events = get_recent_activity(db, limit)
+    return [
+        {
+            "id": e.id,
+            "status": e.status,
+            "title": e.title,
+            "location": e.location,
+            "event_time": e.event_time,
+            "shipment_id": e.shipment_id,
+            "tracking_number": e.shipment.tracking_number,
+        }
+        for e in events
+    ]

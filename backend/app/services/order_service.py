@@ -18,7 +18,7 @@ def generate_order_number() -> str:
     return f"ORD-{date_part}-{rand_part}"
 
 
-def create_order(db: Session, payload: OrderCreate) -> Order:
+def create_order(db: Session, payload: OrderCreate, created_by_user_id: int | None = None) -> Order:
     if not payload.items:
         raise AppError(status.HTTP_400_BAD_REQUEST, "Order must contain at least one item", "EMPTY_ORDER")
 
@@ -31,19 +31,25 @@ def create_order(db: Session, payload: OrderCreate) -> Order:
         shipping_address_id=payload.shipping_address_id,
         billing_address_id=payload.billing_address_id,
         payment_status=PaymentStatus.PENDING,
+        payment_method=payload.payment_method,
         order_status=OrderStatus.PENDING,
+        created_by_user_id=created_by_user_id,
+        shipping_amount=payload.shipping_amount,
+        discount_amount=payload.discount_amount,
+        tax_amount=payload.tax_amount,
+        subtotal_amount=0,
         total_amount=0,
     )
     db.add(order)
     db.flush()
 
-    total_amount = 0.0
+    subtotal_amount = 0.0
     for item in payload.items:
         product = products.get(item.product_id)
         if not product:
             raise AppError(status.HTTP_404_NOT_FOUND, f"Product {item.product_id} not found", "PRODUCT_NOT_FOUND")
         item_total = float(product.price) * item.quantity
-        total_amount += item_total
+        subtotal_amount += item_total
         db.add(
             OrderItem(
                 order_id=order.id,
@@ -54,7 +60,8 @@ def create_order(db: Session, payload: OrderCreate) -> Order:
             )
         )
 
-    order.total_amount = total_amount
+    order.subtotal_amount = subtotal_amount
+    order.total_amount = subtotal_amount + payload.shipping_amount + payload.tax_amount - payload.discount_amount
     db.commit()
     db.refresh(order)
     return order

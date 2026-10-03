@@ -33,7 +33,7 @@ def list_orders(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    query = select(Order)
+    query = select(Order).options(joinedload(Order.created_by))
     if search:
         query = query.filter(Order.order_number.ilike(f"%{search}%"))
     if order_status:
@@ -46,8 +46,8 @@ def list_orders(
 
 
 @router.post("", response_model=OrderResponse, status_code=201)
-def create_order_endpoint(payload: OrderCreate, db: Session = Depends(get_db), _staff: User = Depends(require_staff)):
-    return create_order(db, payload)
+def create_order_endpoint(payload: OrderCreate, db: Session = Depends(get_db), staff: User = Depends(require_staff)):
+    return create_order(db, payload, created_by_user_id=staff.id)
 
 
 def _get_order_or_404(order_id: int, db: Session, current_user: User) -> Order:
@@ -56,6 +56,8 @@ def _get_order_or_404(order_id: int, db: Session, current_user: User) -> Order:
         joinedload(Order.shipping_address),
         joinedload(Order.billing_address),
         joinedload(Order.items),
+        joinedload(Order.created_by),
+        joinedload(Order.shipments),
     )
     order = query.filter(Order.id == order_id).first()
     if not order:
