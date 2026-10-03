@@ -18,6 +18,8 @@ def list_products(
     pagination: PaginationParams = Depends(),
     search: str | None = Query(None),
     status: str | None = Query(None),
+    category: str | None = Query(None),
+    stock_status: str | None = Query(None),
     sort_by: str = Query("created_at"),
     order: str = Query("desc"),
     db: Session = Depends(get_db),
@@ -27,9 +29,23 @@ def list_products(
         query = query.filter(Product.name.ilike(f"%{search}%") | Product.sku.ilike(f"%{search}%"))
     if status:
         query = query.filter(Product.status == status)
+    if category:
+        query = query.filter(Product.category == category)
+    if stock_status == "OUT_OF_STOCK":
+        query = query.filter(Product.stock_quantity <= 0)
+    elif stock_status == "LOW_STOCK":
+        query = query.filter(Product.stock_quantity > 0, Product.stock_quantity <= Product.low_stock_threshold)
+    elif stock_status == "IN_STOCK":
+        query = query.filter(Product.stock_quantity > Product.low_stock_threshold)
     sort_column = getattr(Product, sort_by, Product.created_at)
     query = query.order_by(sort_column.desc() if order == "desc" else sort_column.asc())
     return paginate(db, query, pagination, ProductResponse)
+
+
+@router.get("/categories", response_model=list[str])
+def list_categories(db: Session = Depends(get_db)):
+    rows = db.query(Product.category).filter(Product.category.isnot(None)).distinct().order_by(Product.category).all()
+    return [row[0] for row in rows]
 
 
 @router.post("", response_model=ProductResponse, status_code=201)
