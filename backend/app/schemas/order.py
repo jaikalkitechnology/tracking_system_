@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.models.order import OrderStatus, PaymentStatus
+from app.models.order import OrderStatus, PaymentMethod, PaymentStatus
 from app.schemas.address import AddressResponse
 from app.schemas.customer import CustomerResponse
 from app.schemas.product import ProductResponse
@@ -28,11 +28,13 @@ class OrderCreate(BaseModel):
     customer_id: int
     shipping_address_id: int | None = None
     billing_address_id: int | None = None
+    payment_method: PaymentMethod = PaymentMethod.ONLINE
     items: list[OrderItemCreate]
 
 
 class OrderUpdate(BaseModel):
     payment_status: PaymentStatus | None = None
+    payment_method: PaymentMethod | None = None
     order_status: OrderStatus | None = None
     shipping_address_id: int | None = None
     billing_address_id: int | None = None
@@ -46,6 +48,7 @@ class OrderResponse(BaseModel):
     customer_id: int
     total_amount: float
     payment_status: PaymentStatus
+    payment_method: PaymentMethod
     order_status: OrderStatus
     shipping_address_id: int | None
     billing_address_id: int | None

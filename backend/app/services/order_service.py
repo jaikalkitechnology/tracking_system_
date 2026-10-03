@@ -31,6 +31,7 @@ def create_order(db: Session, payload: OrderCreate) -> Order:
         shipping_address_id=payload.shipping_address_id,
         billing_address_id=payload.billing_address_id,
         payment_status=PaymentStatus.PENDING,
+        payment_method=payload.payment_method,
         order_status=OrderStatus.PENDING,
         total_amount=0,
     )

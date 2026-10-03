@@ -74,6 +74,7 @@ export interface Product {
 }
 
 export type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
+export type PaymentMethod = "ONLINE" | "COD";
 export type OrderStatus = "PENDING" | "CONFIRMED" | "PACKED" | "CANCELLED" | "COMPLETED";
 
 export interface OrderItem {
@@ -91,6 +92,7 @@ export interface Order {
   customer_id: number;
   total_amount: number;
   payment_status: PaymentStatus;
+  payment_method: PaymentMethod;
   order_status: OrderStatus;
   shipping_address_id: number | null;
   billing_address_id: number | null;

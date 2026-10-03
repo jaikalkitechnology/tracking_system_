@@ -18,10 +18,11 @@ export const ordersApi = {
     customer_id: number;
     shipping_address_id?: number;
     billing_address_id?: number;
+    payment_method?: string;
     items: { product_id: number; quantity: number }[];
   }) => api.post<Order>("/orders", payload).then((r) => r.data),
 
-  update: (id: number, payload: Partial<{ payment_status: string; order_status: string }>) =>
+  update: (id: number, payload: Partial<{ payment_status: string; payment_method: string; order_status: string }>) =>
     api.put<Order>(`/orders/${id}`, payload).then((r) => r.data),
 
   remove: (id: number) => api.delete(`/orders/${id}`),
