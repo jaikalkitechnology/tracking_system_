@@ -77,9 +77,11 @@ export function ProductsListPage() {
 
   useEffect(load, [page, debouncedSearch, status, category, stockStatus]);
 
-  useEffect(() => {
+  const loadCategories = () => {
     productsApi.categories().then(setCategories).catch(() => setCategories([]));
-  }, []);
+  };
+
+  useEffect(loadCategories, []);
 
   useEffect(() => {
     Promise.all([
@@ -241,6 +243,7 @@ export function ProductsListPage() {
           onCreated={() => {
             setShowCreate(false);
             load();
+            loadCategories();
           }}
         />
       )}

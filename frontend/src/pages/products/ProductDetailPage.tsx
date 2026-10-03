@@ -9,16 +9,20 @@ import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { ErrorState } from "@/components/ui/EmptyState";
 import { Input, Label } from "@/components/ui/Input";
 import { LoadingState } from "@/components/ui/Spinner";
+import { useAuth } from "@/context/AuthContext";
 import { Product } from "@/types";
 import { formatCurrency, formatDate } from "@/utils/format";
 
 export function ProductDetailPage() {
   const { id } = useParams();
+  const { user } = useAuth();
+  const isStaff = user && user.role !== "CUSTOMER";
   const [product, setProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [stockDraft, setStockDraft] = useState("");
   const [isSavingStock, setIsSavingStock] = useState(false);
+  const [stockError, setStockError] = useState<string | null>(null);
 
   const load = () => {
     if (!id) return;
@@ -38,11 +42,12 @@ export function ProductDetailPage() {
   const handleSaveStock = async () => {
     if (!product) return;
     setIsSavingStock(true);
+    setStockError(null);
     try {
       const updated = await productsApi.update(product.id, { stock_quantity: Number(stockDraft) || 0 });
       setProduct(updated);
     } catch (err) {
-      setError(getApiErrorMessage(err));
+      setStockError(getApiErrorMessage(err));
     } finally {
       setIsSavingStock(false);
     }
@@ -106,15 +111,18 @@ export function ProductDetailPage() {
                 <p className="text-lg font-bold text-slate-900 dark:text-slate-50">{product.low_stock_threshold}</p>
               </div>
             </div>
-            <div>
-              <Label>Update Stock Quantity</Label>
-              <div className="flex gap-2">
-                <Input type="number" min={0} value={stockDraft} onChange={(e) => setStockDraft(e.target.value)} />
-                <Button onClick={handleSaveStock} disabled={isSavingStock}>
-                  {isSavingStock ? "Saving..." : "Save"}
-                </Button>
+            {isStaff && (
+              <div>
+                <Label>Update Stock Quantity</Label>
+                <div className="flex gap-2">
+                  <Input type="number" min={0} value={stockDraft} onChange={(e) => setStockDraft(e.target.value)} />
+                  <Button onClick={handleSaveStock} disabled={isSavingStock}>
+                    {isSavingStock ? "Saving..." : "Save"}
+                  </Button>
+                </div>
+                {stockError && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{stockError}</p>}
               </div>
-            </div>
+            )}
           </CardBody>
         </Card>
       </div>

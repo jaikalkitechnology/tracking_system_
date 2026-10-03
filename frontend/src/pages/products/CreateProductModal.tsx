@@ -28,6 +28,8 @@ export function CreateProductModal({ onClose, onCreated }: { onClose: () => void
     }
     setIsSubmitting(true);
     try {
+      const stockQuantity = Number(form.stock_quantity);
+      const lowStockThreshold = Number(form.low_stock_threshold);
       await productsApi.create({
         sku: form.sku,
         name: form.name,
@@ -35,8 +37,8 @@ export function CreateProductModal({ onClose, onCreated }: { onClose: () => void
         category: form.category || undefined,
         price: Number(form.price),
         weight: form.weight ? Number(form.weight) : undefined,
-        stock_quantity: Number(form.stock_quantity) || 0,
-        low_stock_threshold: Number(form.low_stock_threshold) || 5,
+        stock_quantity: Number.isFinite(stockQuantity) ? stockQuantity : 0,
+        low_stock_threshold: Number.isFinite(lowStockThreshold) ? lowStockThreshold : 5,
       });
       onCreated();
     } catch (err) {
