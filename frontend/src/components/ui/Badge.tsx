@@ -58,7 +58,8 @@ const DOT_COLORS: Record<string, string> = {
   REFUNDED: "bg-slate-400",
 };
 
-export function Badge({ status }: { status: string }) {
+export function Badge({ status }: { status: string | null | undefined }) {
+  if (!status) return null;
   const classes = STATUS_COLORS[status] || "bg-slate-100 text-slate-700 dark:bg-white/10 dark:text-slate-300";
   const dot = DOT_COLORS[status] || "bg-slate-400";
   return (
