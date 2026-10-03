@@ -14,7 +14,7 @@ import { LoadingState } from "@/components/ui/Spinner";
 import { DataTable } from "@/components/tables/DataTable";
 import { IconAlertTriangle, IconOrders, IconPackageCheck, IconShipments, IconTruckMoving } from "@/components/ui/icons";
 import { DashboardSummary, Order, Shipment } from "@/types";
-import { formatCurrency, formatDate } from "@/utils/format";
+import { formatCurrency, formatDateTime } from "@/utils/format";
 
 export function DashboardPage() {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
@@ -118,7 +118,7 @@ export function DashboardPage() {
                 },
                 { header: "Amount", render: (o) => formatCurrency(o.total_amount) },
                 { header: "Status", render: (o) => <Badge status={o.order_status} /> },
-                { header: "Date", render: (o) => formatDate(o.created_at) },
+                { header: "Date", render: (o) => formatDateTime(o.created_at) },
               ]}
             />
           )}
@@ -149,7 +149,7 @@ export function DashboardPage() {
                   ),
                 },
                 { header: "Status", render: (s) => <Badge status={s.status} /> },
-                { header: "Date", render: (s) => formatDate(s.created_at) },
+                { header: "Date", render: (s) => formatDateTime(s.created_at) },
               ]}
             />
           )}
