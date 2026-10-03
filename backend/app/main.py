@@ -11,7 +11,9 @@ from app.api.v1 import (
     notifications,
     orders,
     products,
+    reports,
     shipments,
+    store_settings,
     tracking,
     users,
     warehouses,
@@ -38,6 +40,8 @@ app = FastAPI(
         {"name": "Notifications", "description": "User notifications."},
         {"name": "Dashboard", "description": "Aggregated statistics for the admin dashboard."},
         {"name": "Webhooks", "description": "Inbound courier status update webhooks."},
+        {"name": "Store Settings", "description": "Store configuration (admin only to update)."},
+        {"name": "Reports", "description": "Sales, order status and product performance reports."},
     ],
 )
 
@@ -68,6 +72,8 @@ app.include_router(warehouses.router, prefix=API_PREFIX)
 app.include_router(notifications.router, prefix=API_PREFIX)
 app.include_router(dashboard.router, prefix=API_PREFIX)
 app.include_router(webhooks.router, prefix=API_PREFIX)
+app.include_router(store_settings.router, prefix=API_PREFIX)
+app.include_router(reports.router, prefix=API_PREFIX)
 
 
 @app.get("/", tags=["Health"])

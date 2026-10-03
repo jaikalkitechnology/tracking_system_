@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.core.permissions import require_staff
 from app.database.database import get_db
-from app.models.product import Product
+from app.models.product import Product, ProductImage
 from app.models.user import User
-from app.schemas.product import ProductCreate, ProductResponse, ProductUpdate
+from app.schemas.product import ProductCreate, ProductImageCreate, ProductImageResponse, ProductResponse, ProductUpdate
 from app.utils.pagination import PaginatedResponse, PaginationParams, paginate
 from app.utils.response import AppError
 
@@ -24,7 +24,7 @@ def list_products(
     order: str = Query("desc"),
     db: Session = Depends(get_db),
 ):
-    query = select(Product)
+    query = select(Product).options(selectinload(Product.images))
     if search:
         query = query.filter(Product.name.ilike(f"%{search}%") | Product.sku.ilike(f"%{search}%"))
     if status:
@@ -62,7 +62,9 @@ def create_product(payload: ProductCreate, db: Session = Depends(get_db), _staff
 
 @router.get("/{product_id}", response_model=ProductResponse)
 def get_product(product_id: int, db: Session = Depends(get_db)):
-    product = db.query(Product).filter(Product.id == product_id).first()
+    product = (
+        db.query(Product).options(selectinload(Product.images)).filter(Product.id == product_id).first()
+    )
     if not product:
         raise AppError(404, "Product not found", "PRODUCT_NOT_FOUND")
     return product
@@ -88,4 +90,31 @@ def delete_product(product_id: int, db: Session = Depends(get_db), _staff: User 
     if not product:
         raise AppError(404, "Product not found", "PRODUCT_NOT_FOUND")
     db.delete(product)
+    db.commit()
+
+
+@router.post("/{product_id}/images", response_model=ProductImageResponse, status_code=201)
+def add_product_image(
+    product_id: int, payload: ProductImageCreate, db: Session = Depends(get_db), _staff: User = Depends(require_staff)
+):
+    product = db.query(Product).filter(Product.id == product_id).first()
+    if not product:
+        raise AppError(404, "Product not found", "PRODUCT_NOT_FOUND")
+    image = ProductImage(product_id=product_id, url=payload.url, position=payload.position)
+    db.add(image)
+    db.commit()
+    db.refresh(image)
+    return image
+
+
+@router.delete("/{product_id}/images/{image_id}", status_code=204)
+def delete_product_image(
+    product_id: int, image_id: int, db: Session = Depends(get_db), _staff: User = Depends(require_staff)
+):
+    image = (
+        db.query(ProductImage).filter(ProductImage.id == image_id, ProductImage.product_id == product_id).first()
+    )
+    if not image:
+        raise AppError(404, "Image not found", "IMAGE_NOT_FOUND")
+    db.delete(image)
     db.commit()

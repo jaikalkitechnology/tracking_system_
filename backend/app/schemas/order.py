@@ -46,6 +46,9 @@ class OrderCreate(BaseModel):
     shipping_address_id: int | None = None
     billing_address_id: int | None = None
     payment_method: PaymentMethod = PaymentMethod.ONLINE
+    shipping_amount: float = 0
+    discount_amount: float = 0
+    tax_amount: float = 0
     items: list[OrderItemCreate]
 
 
@@ -63,6 +66,10 @@ class OrderResponse(BaseModel):
     id: int
     order_number: str
     customer_id: int
+    subtotal_amount: float
+    shipping_amount: float
+    discount_amount: float
+    tax_amount: float
     total_amount: float
     payment_status: PaymentStatus
     payment_method: PaymentMethod
