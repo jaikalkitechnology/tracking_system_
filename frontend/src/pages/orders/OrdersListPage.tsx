@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { getApiErrorMessage } from "@/api/axios";
 import { ordersApi } from "@/api/orders";
@@ -13,7 +13,6 @@ import { Pagination } from "@/components/ui/Pagination";
 import { DataTable } from "@/components/tables/DataTable";
 import { StatCard } from "@/components/charts/StatCard";
 import { IconOrders, IconPackageCheck, IconSearch, IconShipments, IconTruckMoving } from "@/components/ui/icons";
-import { CreateOrderModal } from "@/pages/orders/CreateOrderModal";
 import { useAuth } from "@/context/AuthContext";
 import { useBasePath } from "@/hooks/useBasePath";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
@@ -26,6 +25,7 @@ export function OrdersListPage() {
   const { user } = useAuth();
   const isStaff = user && user.role !== "CUSTOMER";
   const basePath = useBasePath();
+  const navigate = useNavigate();
 
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search);
@@ -34,7 +34,6 @@ export function OrdersListPage() {
   const [data, setData] = useState<PaginatedResponse<Order> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showCreate, setShowCreate] = useState(false);
   const [counts, setCounts] = useState<Record<string, number> | null>(null);
 
   const load = () => {
@@ -70,7 +69,7 @@ export function OrdersListPage() {
           <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Orders</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">Manage customer orders and payment status.</p>
         </div>
-        {isStaff && <Button onClick={() => setShowCreate(true)}>+ New Order</Button>}
+        {isStaff && <Button onClick={() => navigate("/orders/new")}>+ New Order</Button>}
       </div>
 
       {counts && (
@@ -167,15 +166,6 @@ export function OrdersListPage() {
         )}
       </Card>
 
-      {showCreate && (
-        <CreateOrderModal
-          onClose={() => setShowCreate(false)}
-          onCreated={() => {
-            setShowCreate(false);
-            load();
-          }}
-        />
-      )}
     </div>
   );
 }

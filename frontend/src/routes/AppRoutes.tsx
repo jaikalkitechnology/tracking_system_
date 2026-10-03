@@ -9,6 +9,7 @@ import { PublicTrackingPage } from "@/pages/tracking/PublicTrackingPage";
 import { DashboardPage } from "@/pages/dashboard/DashboardPage";
 import { OrdersListPage } from "@/pages/orders/OrdersListPage";
 import { OrderDetailPage } from "@/pages/orders/OrderDetailPage";
+import { CreateOrderPage } from "@/pages/orders/CreateOrderPage";
 import { ShipmentsListPage } from "@/pages/shipments/ShipmentsListPage";
 import { ShipmentDetailPage } from "@/pages/shipments/ShipmentDetailPage";
 import { CustomersListPage } from "@/pages/customers/CustomersListPage";
@@ -21,6 +22,8 @@ import { WarehousesListPage } from "@/pages/warehouses/WarehousesListPage";
 import { WarehouseDetailPage } from "@/pages/warehouses/WarehouseDetailPage";
 import { NotificationsPage } from "@/pages/notifications/NotificationsPage";
 import { SettingsPage } from "@/pages/settings/SettingsPage";
+import { ReportsPage } from "@/pages/reports/ReportsPage";
+import { InventoryPage } from "@/pages/inventory/InventoryPage";
 import { CustomerOrdersPage } from "@/pages/customer/CustomerOrdersPage";
 import { CustomerOrderDetailPage } from "@/pages/customer/CustomerOrderDetailPage";
 import { CustomerShipmentDetailPage } from "@/pages/customer/CustomerShipmentDetailPage";
@@ -44,7 +47,10 @@ export function AppRoutes() {
       <Route element={<ProtectedRoute allowedRoles={[...STAFF_ROLES]} />}>
         <Route element={<AdminLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/reports" element={<ReportsPage />} />
+          <Route path="/inventory" element={<InventoryPage />} />
           <Route path="/orders" element={<OrdersListPage />} />
+          <Route path="/orders/new" element={<CreateOrderPage />} />
           <Route path="/orders/:id" element={<OrderDetailPage />} />
           <Route path="/shipments" element={<ShipmentsListPage />} />
           <Route path="/shipments/:id" element={<ShipmentDetailPage />} />

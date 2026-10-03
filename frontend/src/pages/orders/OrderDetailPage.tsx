@@ -141,7 +141,6 @@ export function OrderDetailPage() {
   if (error) return <ErrorState message={error} />;
   if (!order) return null;
 
-  const subtotal = order.items.reduce((sum, item) => sum + Number(item.total), 0);
   const nextStatus: Partial<Record<OrderStatus, OrderStatus>> = {
     PENDING: "CONFIRMED",
     CONFIRMED: "PACKED",
@@ -278,8 +277,24 @@ export function OrderDetailPage() {
             <CardBody className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-slate-500 dark:text-slate-400">Subtotal</span>
-                <span className="text-slate-700 dark:text-slate-300">{formatCurrency(subtotal)}</span>
+                <span className="text-slate-700 dark:text-slate-300">{formatCurrency(order.subtotal_amount)}</span>
               </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500 dark:text-slate-400">Shipping</span>
+                <span className="text-slate-700 dark:text-slate-300">{formatCurrency(order.shipping_amount)}</span>
+              </div>
+              {order.discount_amount > 0 && (
+                <div className="flex justify-between">
+                  <span className="text-slate-500 dark:text-slate-400">Discount</span>
+                  <span className="text-emerald-600 dark:text-emerald-400">-{formatCurrency(order.discount_amount)}</span>
+                </div>
+              )}
+              {order.tax_amount > 0 && (
+                <div className="flex justify-between">
+                  <span className="text-slate-500 dark:text-slate-400">Tax</span>
+                  <span className="text-slate-700 dark:text-slate-300">{formatCurrency(order.tax_amount)}</span>
+                </div>
+              )}
               <div className="flex justify-between border-t border-slate-100 pt-2 text-base font-semibold dark:border-surface-dark-border">
                 <span className="text-slate-900 dark:text-slate-50">Total Amount</span>
                 <span className="text-slate-900 dark:text-slate-50">{formatCurrency(order.total_amount)}</span>
