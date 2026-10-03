@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import { getApiErrorMessage } from "@/api/axios";
 import { customersApi } from "@/api/customers";
+import { reportsApi } from "@/api/reports";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
@@ -56,6 +57,7 @@ export function CustomersListPage() {
   const [showCreate, setShowCreate] = useState(false);
   const [showAddAddress, setShowAddAddress] = useState(false);
   const [counts, setCounts] = useState<Record<string, number> | null>(null);
+  const [newCustomersTrend, setNewCustomersTrend] = useState<number | null>(null);
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [selectedCustomer, setSelectedCustomer] = useState<CustomerDetail | null>(null);
@@ -86,6 +88,11 @@ export function CustomersListPage() {
     ])
       .then(([all, active, inactive]) => setCounts({ total: all.total, active: active.total, inactive: inactive.total }))
       .catch(() => setCounts(null));
+
+    reportsApi
+      .summary(30)
+      .then((r) => setNewCustomersTrend(r.new_customers_trend))
+      .catch(() => setNewCustomersTrend(null));
   }, []);
 
   const loadSelectedCustomer = () => {
@@ -115,7 +122,14 @@ export function CustomersListPage() {
 
       {counts && (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <StatCard label="Total Customers" value={counts.total} icon={<IconCustomers />} tone="brand" />
+          <StatCard
+            label="Total Customers"
+            value={counts.total}
+            icon={<IconCustomers />}
+            tone="brand"
+            trend={newCustomersTrend ?? undefined}
+            trendLabel="new vs last 30 days"
+          />
           <StatCard label="Active" value={counts.active} icon={<IconPackageCheck />} tone="emerald" />
           <StatCard label="Inactive" value={counts.inactive} icon={<IconAlertTriangle />} tone="red" />
         </div>

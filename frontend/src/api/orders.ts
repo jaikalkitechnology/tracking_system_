@@ -19,6 +19,9 @@ export const ordersApi = {
     shipping_address_id?: number;
     billing_address_id?: number;
     payment_method?: string;
+    shipping_amount?: number;
+    discount_amount?: number;
+    tax_amount?: number;
     items: { product_id: number; quantity: number }[];
   }) => api.post<Order>("/orders", payload).then((r) => r.data),
 

@@ -6,6 +6,7 @@ from app.core.permissions import get_current_user, require_staff
 from app.database.database import get_db
 from app.models.customer import Customer
 from app.models.order import Order
+from app.models.order_item import OrderItem
 from app.models.shipment import Shipment
 from app.models.user import User, UserRole
 from app.schemas.shipment import ShipmentCreate, ShipmentDetailResponse, ShipmentResponse, ShipmentStatusUpdate, ShipmentUpdate
@@ -77,7 +78,12 @@ def create_shipment_endpoint(payload: ShipmentCreate, db: Session = Depends(get_
 def _get_shipment_or_404(shipment_id: int, db: Session, current_user: User) -> Shipment:
     shipment = (
         db.query(Shipment)
-        .options(joinedload(Shipment.courier), joinedload(Shipment.warehouse), joinedload(Shipment.tracking_events))
+        .options(
+            joinedload(Shipment.courier),
+            joinedload(Shipment.warehouse),
+            joinedload(Shipment.tracking_events),
+            joinedload(Shipment.order).joinedload(Order.items).joinedload(OrderItem.product),
+        )
         .filter(Shipment.id == shipment_id)
         .first()
     )
