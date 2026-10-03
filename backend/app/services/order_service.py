@@ -18,7 +18,7 @@ def generate_order_number() -> str:
     return f"ORD-{date_part}-{rand_part}"
 
 
-def create_order(db: Session, payload: OrderCreate) -> Order:
+def create_order(db: Session, payload: OrderCreate, created_by_user_id: int | None = None) -> Order:
     if not payload.items:
         raise AppError(status.HTTP_400_BAD_REQUEST, "Order must contain at least one item", "EMPTY_ORDER")
 
@@ -33,6 +33,7 @@ def create_order(db: Session, payload: OrderCreate) -> Order:
         payment_status=PaymentStatus.PENDING,
         payment_method=payload.payment_method,
         order_status=OrderStatus.PENDING,
+        created_by_user_id=created_by_user_id,
         total_amount=0,
     )
     db.add(order)

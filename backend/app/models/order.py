@@ -39,9 +39,11 @@ class Order(TimestampMixin, Base):
     order_status: Mapped[OrderStatus] = mapped_column(Enum(OrderStatus), default=OrderStatus.PENDING, nullable=False, index=True)
     shipping_address_id: Mapped[int | None] = mapped_column(ForeignKey("addresses.id"), nullable=True)
     billing_address_id: Mapped[int | None] = mapped_column(ForeignKey("addresses.id"), nullable=True)
+    created_by_user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     customer = relationship("Customer", back_populates="orders")
     shipping_address = relationship("Address", foreign_keys=[shipping_address_id])
     billing_address = relationship("Address", foreign_keys=[billing_address_id])
+    created_by = relationship("User", foreign_keys=[created_by_user_id])
     items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
     shipments = relationship("Shipment", back_populates="order")

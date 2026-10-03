@@ -18,7 +18,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useBasePath } from "@/hooks/useBasePath";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Order, PaginatedResponse } from "@/types";
-import { formatCurrency, formatDate } from "@/utils/format";
+import { formatCurrency, formatDateTime } from "@/utils/format";
 
 const ORDER_STATUSES = ["PENDING", "CONFIRMED", "PACKED", "CANCELLED", "COMPLETED"];
 
@@ -141,7 +141,17 @@ export function OrdersListPage() {
                 { header: "Payment", render: (o) => <Badge status={o.payment_status} /> },
                 { header: "Method", render: (o) => (o.payment_method === "COD" ? "COD" : "Online") },
                 { header: "Status", render: (o) => <Badge status={o.order_status} /> },
-                { header: "Created", render: (o) => formatDate(o.created_at) },
+                {
+                  header: "Created",
+                  render: (o) => (
+                    <div>
+                      <div>{formatDateTime(o.created_at)}</div>
+                      {o.created_by && (
+                        <div className="text-xs text-slate-400 dark:text-slate-500">by {o.created_by.name}</div>
+                      )}
+                    </div>
+                  ),
+                },
                 {
                   header: "Actions",
                   render: (o) => (
