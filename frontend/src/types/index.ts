@@ -86,6 +86,11 @@ export interface OrderItem {
   product?: Product | null;
 }
 
+export interface OrderCreator {
+  id: number;
+  name: string;
+}
+
 export interface Order {
   id: number;
   order_number: string;
@@ -96,6 +101,7 @@ export interface Order {
   order_status: OrderStatus;
   shipping_address_id: number | null;
   billing_address_id: number | null;
+  created_by: OrderCreator | null;
   created_at: string;
   updated_at: string;
 }

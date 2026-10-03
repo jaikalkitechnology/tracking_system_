@@ -40,6 +40,7 @@ export function ShipmentsListPage() {
   const debouncedTracking = useDebouncedValue(trackingNumber);
   const debouncedOrder = useDebouncedValue(orderNumber);
   const [status, setStatus] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
   const [page, setPage] = useState(1);
   const [data, setData] = useState<PaginatedResponse<Shipment> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -56,11 +57,12 @@ export function ShipmentsListPage() {
         tracking_number: debouncedTracking || undefined,
         order_number: debouncedOrder || undefined,
         status: status || undefined,
+        payment_method: paymentMethod || undefined,
       })
       .then(setData)
       .catch((err) => setError(getApiErrorMessage(err)))
       .finally(() => setIsLoading(false));
-  }, [page, debouncedTracking, debouncedOrder, status]);
+  }, [page, debouncedTracking, debouncedOrder, status, paymentMethod]);
 
   useEffect(() => {
     dashboardApi.shipmentStatistics().then(setStatistics).catch(() => setStatistics([]));
@@ -125,6 +127,18 @@ export function ShipmentsListPage() {
                 {s.replace(/_/g, " ")}
               </option>
             ))}
+          </Select>
+          <Select
+            value={paymentMethod}
+            onChange={(e) => {
+              setPage(1);
+              setPaymentMethod(e.target.value);
+            }}
+            className="max-w-[180px]"
+          >
+            <option value="">All payment methods</option>
+            <option value="ONLINE">Online</option>
+            <option value="COD">Cash on Delivery (COD)</option>
           </Select>
         </div>
 

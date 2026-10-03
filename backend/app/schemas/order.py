@@ -8,6 +8,13 @@ from app.schemas.customer import CustomerResponse
 from app.schemas.product import ProductResponse
 
 
+class OrderCreatorResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+
+
 class OrderItemCreate(BaseModel):
     product_id: int
     quantity: int = Field(gt=0)
@@ -52,6 +59,7 @@ class OrderResponse(BaseModel):
     order_status: OrderStatus
     shipping_address_id: int | None
     billing_address_id: int | None
+    created_by: OrderCreatorResponse | None = None
     created_at: datetime
     updated_at: datetime
 
