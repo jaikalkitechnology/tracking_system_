@@ -63,6 +63,7 @@ export interface Product {
   name: string;
   description: string | null;
   category: string | null;
+  image_url: string | null;
   price: number;
   weight: number | null;
   stock_quantity: number;

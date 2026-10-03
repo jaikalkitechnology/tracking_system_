@@ -21,6 +21,7 @@ class Product(TimestampMixin, Base):
     name: Mapped[str] = mapped_column(String(200), nullable=False)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     category: Mapped[str | None] = mapped_column(String(80), nullable=True, index=True)
+    image_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     price: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False)
     weight: Mapped[float | None] = mapped_column(Numeric(10, 3), nullable=True)
     stock_quantity: Mapped[int] = mapped_column(Integer, default=0, nullable=False)

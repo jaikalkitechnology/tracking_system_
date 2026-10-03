@@ -21,6 +21,25 @@ const STEPS: { status: OrderStatus; label: string }[] = [
   { status: "COMPLETED", label: "Completed" },
 ];
 
+function OrderItemThumb({ name, imageUrl }: { name: string; imageUrl?: string | null }) {
+  const [failed, setFailed] = useState(false);
+  if (imageUrl && !failed) {
+    return (
+      <img
+        src={imageUrl}
+        alt={name}
+        className="h-10 w-10 shrink-0 rounded-lg border border-slate-200 object-cover dark:border-surface-dark-border"
+        onError={() => setFailed(true)}
+      />
+    );
+  }
+  return (
+    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-sm font-semibold text-brand-700 dark:bg-brand-500/20 dark:text-brand-300">
+      {name.trim().charAt(0).toUpperCase() || "?"}
+    </span>
+  );
+}
+
 function OrderProgress({ status }: { status: OrderStatus }) {
   if (status === "CANCELLED") {
     return (
@@ -203,7 +222,13 @@ export function OrderDetailPage() {
                   {order.items.map((item) => (
                     <tr key={item.id} className="border-b border-slate-50 last:border-0 dark:border-surface-dark-border/60">
                       <td className="px-5 py-3 font-medium text-slate-800 dark:text-slate-200">
-                        {item.product?.name || `Product #${item.product_id}`}
+                        <div className="flex items-center gap-3">
+                          <OrderItemThumb
+                            name={item.product?.name || "?"}
+                            imageUrl={item.product?.image_url}
+                          />
+                          <span>{item.product?.name || `Product #${item.product_id}`}</span>
+                        </div>
                       </td>
                       <td className="px-5 py-3 text-slate-600 dark:text-slate-300">{formatCurrency(item.price)}</td>
                       <td className="px-5 py-3 text-slate-600 dark:text-slate-300">{item.quantity}</td>

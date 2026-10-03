@@ -33,7 +33,18 @@ function toneFor(name: string): string {
   return TILE_TONES[hash];
 }
 
-function ProductTile({ name }: { name: string }) {
+function ProductTile({ name, imageUrl }: { name: string; imageUrl?: string | null }) {
+  const [failed, setFailed] = useState(false);
+  if (imageUrl && !failed) {
+    return (
+      <img
+        src={imageUrl}
+        alt={name}
+        className="h-10 w-10 shrink-0 rounded-lg border border-slate-200 object-cover dark:border-surface-dark-border"
+        onError={() => setFailed(true)}
+      />
+    );
+  }
   return (
     <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-sm font-semibold ${toneFor(name)}`}>
       {name.trim().charAt(0).toUpperCase() || "?"}
@@ -192,7 +203,7 @@ export function ProductsListPage() {
                   header: "Product",
                   render: (p) => (
                     <Link to={`/products/${p.id}`} className="flex items-center gap-3">
-                      <ProductTile name={p.name} />
+                      <ProductTile name={p.name} imageUrl={p.image_url} />
                       <span>
                         <span className="block font-medium text-brand-600 dark:text-brand-400">{p.name}</span>
                         {p.description && (

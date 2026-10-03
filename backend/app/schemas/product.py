@@ -10,6 +10,7 @@ class ProductBase(BaseModel):
     name: str
     description: str | None = None
     category: str | None = None
+    image_url: str | None = None
     price: float
     weight: float | None = None
     stock_quantity: int = 0
@@ -24,6 +25,7 @@ class ProductUpdate(BaseModel):
     name: str | None = None
     description: str | None = None
     category: str | None = None
+    image_url: str | None = None
     price: float | None = None
     weight: float | None = None
     stock_quantity: int | None = None

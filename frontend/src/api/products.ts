@@ -22,6 +22,7 @@ export const productsApi = {
     name: string;
     description?: string;
     category?: string;
+    image_url?: string;
     price: number;
     weight?: number;
     stock_quantity?: number;
@@ -34,6 +35,7 @@ export const productsApi = {
       name: string;
       description: string;
       category: string;
+      image_url: string;
       price: number;
       weight: number;
       stock_quantity: number;

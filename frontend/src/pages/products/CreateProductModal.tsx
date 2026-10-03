@@ -12,6 +12,7 @@ export function CreateProductModal({ onClose, onCreated }: { onClose: () => void
     name: "",
     description: "",
     category: "",
+    image_url: "",
     price: "",
     weight: "",
     stock_quantity: "0",
@@ -35,6 +36,7 @@ export function CreateProductModal({ onClose, onCreated }: { onClose: () => void
         name: form.name,
         description: form.description || undefined,
         category: form.category || undefined,
+        image_url: form.image_url || undefined,
         price: Number(form.price),
         weight: form.weight ? Number(form.weight) : undefined,
         stock_quantity: Number.isFinite(stockQuantity) ? stockQuantity : 0,
@@ -87,6 +89,22 @@ export function CreateProductModal({ onClose, onCreated }: { onClose: () => void
         <div>
           <Label>Description</Label>
           <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+        </div>
+        <div>
+          <Label>Image URL</Label>
+          <Input
+            placeholder="https://..."
+            value={form.image_url}
+            onChange={(e) => setForm({ ...form, image_url: e.target.value })}
+          />
+          {form.image_url && (
+            <img
+              src={form.image_url}
+              alt="Preview"
+              className="mt-2 h-20 w-20 rounded-lg border border-slate-200 object-cover dark:border-surface-dark-border"
+              onError={(e) => (e.currentTarget.style.display = "none")}
+            />
+          )}
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>

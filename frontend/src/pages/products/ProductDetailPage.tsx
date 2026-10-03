@@ -23,6 +23,10 @@ export function ProductDetailPage() {
   const [stockDraft, setStockDraft] = useState("");
   const [isSavingStock, setIsSavingStock] = useState(false);
   const [stockError, setStockError] = useState<string | null>(null);
+  const [imageDraft, setImageDraft] = useState("");
+  const [isSavingImage, setIsSavingImage] = useState(false);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const [imageFailed, setImageFailed] = useState(false);
 
   const load = () => {
     if (!id) return;
@@ -32,6 +36,8 @@ export function ProductDetailPage() {
       .then((p) => {
         setProduct(p);
         setStockDraft(String(p.stock_quantity));
+        setImageDraft(p.image_url || "");
+        setImageFailed(false);
       })
       .catch((err) => setError(getApiErrorMessage(err)))
       .finally(() => setIsLoading(false));
@@ -53,6 +59,21 @@ export function ProductDetailPage() {
     }
   };
 
+  const handleSaveImage = async () => {
+    if (!product) return;
+    setIsSavingImage(true);
+    setImageError(null);
+    try {
+      const updated = await productsApi.update(product.id, { image_url: imageDraft });
+      setProduct(updated);
+      setImageFailed(false);
+    } catch (err) {
+      setImageError(getApiErrorMessage(err));
+    } finally {
+      setIsSavingImage(false);
+    }
+  };
+
   if (isLoading) return <LoadingState />;
   if (error) return <ErrorState message={error} />;
   if (!product) return null;
@@ -60,9 +81,23 @@ export function ProductDetailPage() {
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">{product.name}</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">SKU: {product.sku}</p>
+        <div className="flex items-center gap-3">
+          {product.image_url && !imageFailed ? (
+            <img
+              src={product.image_url}
+              alt={product.name}
+              className="h-16 w-16 rounded-lg border border-slate-200 object-cover dark:border-surface-dark-border"
+              onError={() => setImageFailed(true)}
+            />
+          ) : (
+            <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-brand-100 text-xl font-semibold text-brand-700 dark:bg-brand-500/20 dark:text-brand-300">
+              {product.name.trim().charAt(0).toUpperCase() || "?"}
+            </span>
+          )}
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">{product.name}</h1>
+            <p className="text-sm text-slate-500 dark:text-slate-400">SKU: {product.sku}</p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <Badge status={product.status} />
@@ -77,6 +112,18 @@ export function ProductDetailPage() {
           </CardHeader>
           <CardBody className="space-y-3 text-sm">
             {product.description && <p className="text-slate-600 dark:text-slate-300">{product.description}</p>}
+            {isStaff && (
+              <div>
+                <Label>Image URL</Label>
+                <div className="flex gap-2">
+                  <Input value={imageDraft} onChange={(e) => setImageDraft(e.target.value)} placeholder="https://..." />
+                  <Button onClick={handleSaveImage} disabled={isSavingImage}>
+                    {isSavingImage ? "Saving..." : "Save"}
+                  </Button>
+                </div>
+                {imageError && <p className="mt-1 text-xs text-red-600 dark:text-red-400">{imageError}</p>}
+              </div>
+            )}
             <div className="flex justify-between">
               <span className="text-slate-500 dark:text-slate-400">Category</span>
               <span className="font-medium text-slate-800 dark:text-slate-200">{product.category || "-"}</span>
