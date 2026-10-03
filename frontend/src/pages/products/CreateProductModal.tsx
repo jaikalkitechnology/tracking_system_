@@ -12,6 +12,7 @@ export function CreateProductModal({ onClose, onCreated }: { onClose: () => void
     name: "",
     description: "",
     category: "",
+    brand: "",
     image_url: "",
     price: "",
     weight: "",
@@ -36,6 +37,7 @@ export function CreateProductModal({ onClose, onCreated }: { onClose: () => void
         name: form.name,
         description: form.description || undefined,
         category: form.category || undefined,
+        brand: form.brand || undefined,
         image_url: form.image_url || undefined,
         price: Number(form.price),
         weight: form.weight ? Number(form.weight) : undefined,
@@ -81,6 +83,10 @@ export function CreateProductModal({ onClose, onCreated }: { onClose: () => void
               onChange={(e) => setForm({ ...form, category: e.target.value })}
             />
           </div>
+        </div>
+        <div>
+          <Label>Brand</Label>
+          <Input placeholder="e.g. Vastraliya" value={form.brand} onChange={(e) => setForm({ ...form, brand: e.target.value })} />
         </div>
         <div>
           <Label>Name</Label>
