@@ -15,7 +15,7 @@ import { StatCard } from "@/components/charts/StatCard";
 import { IconAlertTriangle, IconPackageCheck, IconSearch, IconShipments, IconTruckMoving } from "@/components/ui/icons";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { PaginatedResponse, Shipment } from "@/types";
-import { formatDate } from "@/utils/format";
+import { formatDate, formatDateTime } from "@/utils/format";
 
 const SHIPMENT_STATUSES = [
   "ORDER_CONFIRMED",
@@ -167,7 +167,8 @@ export function ShipmentsListPage() {
                 { header: "Shipment #", render: (s) => s.shipment_number },
                 { header: "Status", render: (s) => <Badge status={s.status} /> },
                 { header: "Est. Delivery", render: (s) => formatDate(s.estimated_delivery_date) },
-                { header: "Created", render: (s) => formatDate(s.created_at) },
+                { header: "Created", render: (s) => formatDateTime(s.created_at) },
+                { header: "Updated", render: (s) => formatDateTime(s.updated_at) },
                 {
                   header: "Actions",
                   render: (s) => (
