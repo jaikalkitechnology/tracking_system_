@@ -7,10 +7,56 @@ import { Input, Label } from "@/components/ui/Input";
 import { IconEye, IconEyeOff } from "@/components/ui/icons";
 import { useAuth } from "@/context/AuthContext";
 
+// PLACEHOLDER demo values only - tell me the real gate username/password you want
+// and I'll swap these in before this ships.
+const GATE_USERNAME = "staffgate";
+const GATE_PASSWORD = "letmein2026";
+
+function LoginGate({ onPass }: { onPass: () => void }) {
+  const navigate = useNavigate();
+  const [gateUser, setGateUser] = useState("");
+  const [gatePass, setGatePass] = useState("");
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (gateUser === GATE_USERNAME && gatePass === GATE_PASSWORD) {
+      onPass();
+    } else {
+      navigate("/track", { replace: true });
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 px-4">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-sm rounded-xl border border-slate-200 bg-white p-5 shadow-xl dark:border-surface-dark-border dark:bg-surface-dark-subtle"
+      >
+        <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100">Authentication Required</h2>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Enter the staff access code to continue.</p>
+        <div className="mt-4 space-y-3">
+          <div>
+            <Label>Username</Label>
+            <Input value={gateUser} onChange={(e) => setGateUser(e.target.value)} autoFocus />
+          </div>
+          <div>
+            <Label>Password</Label>
+            <Input type="password" value={gatePass} onChange={(e) => setGatePass(e.target.value)} />
+          </div>
+        </div>
+        <Button type="submit" className="mt-4 w-full">
+          OK
+        </Button>
+      </form>
+    </div>
+  );
+}
+
 export function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [gatePassed, setGatePassed] = useState(false);
   const [email, setEmail] = useState(() => searchParams.get("email") || searchParams.get("username") || "");
   const [password, setPassword] = useState(() => searchParams.get("password") || "");
   const [showPassword, setShowPassword] = useState(false);
@@ -48,6 +94,10 @@ export function LoginPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (!gatePassed) {
+    return <LoginGate onPass={() => setGatePassed(true)} />;
+  }
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-card dark:border-surface-dark-border dark:bg-surface-dark-subtle dark:shadow-card-dark">
