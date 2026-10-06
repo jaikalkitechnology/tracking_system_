@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { getApiErrorMessage } from "@/api/axios";
 import { Button } from "@/components/ui/Button";
@@ -71,12 +71,6 @@ export function LoginPage() {
           {isSubmitting ? "Signing in..." : "Sign in"}
         </Button>
       </form>
-
-      <p className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
-        <Link to="/track" className="font-medium text-brand-600 hover:underline dark:text-brand-400">
-          Track a shipment without signing in
-        </Link>
-      </p>
     </div>
   );
 }
