@@ -13,7 +13,6 @@ import { Pagination } from "@/components/ui/Pagination";
 import { DataTable } from "@/components/tables/DataTable";
 import { StatCard } from "@/components/charts/StatCard";
 import { IconAlertTriangle, IconCustomers, IconPackageCheck, IconSearch } from "@/components/ui/icons";
-import { AddAddressModal } from "@/pages/customers/AddAddressModal";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Customer, CustomerDetail, PaginatedResponse } from "@/types";
 import { formatCurrency, formatDate } from "@/utils/format";
@@ -52,7 +51,6 @@ export function CustomersListPage() {
   const [data, setData] = useState<PaginatedResponse<Customer> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showAddAddress, setShowAddAddress] = useState(false);
   const [counts, setCounts] = useState<Record<string, number> | null>(null);
   const [newCustomersTrend, setNewCustomersTrend] = useState<number | null>(null);
 
@@ -239,17 +237,9 @@ export function CustomersListPage() {
                 </div>
 
                 <div>
-                  <div className="mb-2 flex items-center justify-between">
-                    <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                      Addresses ({selectedCustomer.addresses.length})
-                    </p>
-                    <button
-                      onClick={() => setShowAddAddress(true)}
-                      className="text-xs font-medium text-brand-600 hover:underline dark:text-brand-400"
-                    >
-                      + Add
-                    </button>
-                  </div>
+                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                    Addresses ({selectedCustomer.addresses.length})
+                  </p>
                   {selectedCustomer.addresses.length === 0 ? (
                     <p className="text-sm text-slate-400 dark:text-slate-500">No addresses on file.</p>
                   ) : (
@@ -277,17 +267,6 @@ export function CustomersListPage() {
           )}
         </div>
       </div>
-
-      {showAddAddress && selectedCustomer && (
-        <AddAddressModal
-          customerId={selectedCustomer.id}
-          onClose={() => setShowAddAddress(false)}
-          onCreated={() => {
-            setShowAddAddress(false);
-            loadSelectedCustomer();
-          }}
-        />
-      )}
     </div>
   );
 }
