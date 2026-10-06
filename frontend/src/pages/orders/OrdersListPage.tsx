@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { getApiErrorMessage } from "@/api/axios";
 import { ordersApi } from "@/api/orders";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { EmptyState, ErrorState } from "@/components/ui/EmptyState";
 import { Input, Select } from "@/components/ui/Input";
@@ -25,7 +24,6 @@ export function OrdersListPage() {
   const { user } = useAuth();
   const isStaff = user && user.role !== "CUSTOMER";
   const basePath = useBasePath();
-  const navigate = useNavigate();
 
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search);
@@ -64,12 +62,9 @@ export function OrdersListPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Orders</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Manage customer orders and payment status.</p>
-        </div>
-        {isStaff && <Button onClick={() => navigate("/orders/new")}>+ New Order</Button>}
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Orders</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Manage customer orders and payment status.</p>
       </div>
 
       {counts && (

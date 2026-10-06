@@ -5,7 +5,6 @@ import { getApiErrorMessage } from "@/api/axios";
 import { customersApi } from "@/api/customers";
 import { reportsApi } from "@/api/reports";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { EmptyState, ErrorState } from "@/components/ui/EmptyState";
 import { Input } from "@/components/ui/Input";
@@ -15,7 +14,6 @@ import { DataTable } from "@/components/tables/DataTable";
 import { StatCard } from "@/components/charts/StatCard";
 import { IconAlertTriangle, IconCustomers, IconPackageCheck, IconSearch } from "@/components/ui/icons";
 import { AddAddressModal } from "@/pages/customers/AddAddressModal";
-import { CreateCustomerModal } from "@/pages/customers/CreateCustomerModal";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { Customer, CustomerDetail, PaginatedResponse } from "@/types";
 import { formatCurrency, formatDate } from "@/utils/format";
@@ -54,7 +52,6 @@ export function CustomersListPage() {
   const [data, setData] = useState<PaginatedResponse<Customer> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showCreate, setShowCreate] = useState(false);
   const [showAddAddress, setShowAddAddress] = useState(false);
   const [counts, setCounts] = useState<Record<string, number> | null>(null);
   const [newCustomersTrend, setNewCustomersTrend] = useState<number | null>(null);
@@ -112,12 +109,9 @@ export function CustomersListPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Customers</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Manage your customer accounts, view order history and details.</p>
-        </div>
-        <Button onClick={() => setShowCreate(true)}>+ New Customer</Button>
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Customers</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Manage your customer accounts, view order history and details.</p>
       </div>
 
       {counts && (
@@ -283,16 +277,6 @@ export function CustomersListPage() {
           )}
         </div>
       </div>
-
-      {showCreate && (
-        <CreateCustomerModal
-          onClose={() => setShowCreate(false)}
-          onCreated={() => {
-            setShowCreate(false);
-            load();
-          }}
-        />
-      )}
 
       {showAddAddress && selectedCustomer && (
         <AddAddressModal

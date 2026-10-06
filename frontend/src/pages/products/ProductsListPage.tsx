@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { getApiErrorMessage } from "@/api/axios";
 import { productsApi } from "@/api/products";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { EmptyState, ErrorState } from "@/components/ui/EmptyState";
 import { Input, Select } from "@/components/ui/Input";
@@ -13,8 +12,6 @@ import { Pagination } from "@/components/ui/Pagination";
 import { DataTable } from "@/components/tables/DataTable";
 import { StatCard } from "@/components/charts/StatCard";
 import { IconAlertTriangle, IconPackageCheck, IconProducts, IconSearch } from "@/components/ui/icons";
-import { CreateProductModal } from "@/pages/products/CreateProductModal";
-import { useAuth } from "@/context/AuthContext";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { PaginatedResponse, Product } from "@/types";
 import { formatCurrency } from "@/utils/format";
@@ -53,9 +50,6 @@ function ProductTile({ name, imageUrl }: { name: string; imageUrl?: string | nul
 }
 
 export function ProductsListPage() {
-  const { user } = useAuth();
-  const isStaff = user && user.role !== "CUSTOMER";
-
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search);
   const [status, setStatus] = useState("");
@@ -66,7 +60,6 @@ export function ProductsListPage() {
   const [categories, setCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showCreate, setShowCreate] = useState(false);
   const [counts, setCounts] = useState<Record<string, number> | null>(null);
 
   const load = () => {
@@ -109,12 +102,9 @@ export function ProductsListPage() {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Products</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">Manage your product catalog, stock and details.</p>
-        </div>
-        {isStaff && <Button onClick={() => setShowCreate(true)}>+ New Product</Button>}
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Products</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Manage your product catalog, stock and details.</p>
       </div>
 
       {counts && (
@@ -247,17 +237,6 @@ export function ProductsListPage() {
           </>
         )}
       </Card>
-
-      {showCreate && (
-        <CreateProductModal
-          onClose={() => setShowCreate(false)}
-          onCreated={() => {
-            setShowCreate(false);
-            load();
-            loadCategories();
-          }}
-        />
-      )}
     </div>
   );
 }
