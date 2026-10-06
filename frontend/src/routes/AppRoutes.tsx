@@ -16,10 +16,6 @@ import { CustomersListPage } from "@/pages/customers/CustomersListPage";
 import { CustomerDetailPage } from "@/pages/customers/CustomerDetailPage";
 import { ProductsListPage } from "@/pages/products/ProductsListPage";
 import { ProductDetailPage } from "@/pages/products/ProductDetailPage";
-import { CouriersListPage } from "@/pages/couriers/CouriersListPage";
-import { CourierDetailPage } from "@/pages/couriers/CourierDetailPage";
-import { WarehousesListPage } from "@/pages/warehouses/WarehousesListPage";
-import { WarehouseDetailPage } from "@/pages/warehouses/WarehouseDetailPage";
 import { NotificationsPage } from "@/pages/notifications/NotificationsPage";
 import { SettingsPage } from "@/pages/settings/SettingsPage";
 import { ReportsPage } from "@/pages/reports/ReportsPage";
@@ -58,10 +54,6 @@ export function AppRoutes() {
           <Route path="/customers/:id" element={<CustomerDetailPage />} />
           <Route path="/products" element={<ProductsListPage />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
-          <Route path="/couriers" element={<CouriersListPage />} />
-          <Route path="/couriers/:id" element={<CourierDetailPage />} />
-          <Route path="/warehouses" element={<WarehousesListPage />} />
-          <Route path="/warehouses/:id" element={<WarehouseDetailPage />} />
           <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>

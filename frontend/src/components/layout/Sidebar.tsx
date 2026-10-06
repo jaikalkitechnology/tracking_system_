@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { UserRole } from "@/types";
 import {
-  IconCourier,
   IconCustomers,
   IconDashboard,
   IconInventory,
@@ -13,7 +12,6 @@ import {
   IconReports,
   IconSettings,
   IconShipments,
-  IconWarehouse,
 } from "@/components/ui/icons";
 import { ReactNode } from "react";
 
@@ -32,8 +30,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Customers", to: "/customers", icon: <IconCustomers />, roles: ["SUPER_ADMIN", "ADMIN", "MANAGER", "WAREHOUSE"] },
   { label: "Products", to: "/products", icon: <IconProducts /> },
   { label: "Inventory", to: "/inventory", icon: <IconInventory />, roles: ["SUPER_ADMIN", "ADMIN", "MANAGER", "WAREHOUSE"] },
-  { label: "Couriers", to: "/couriers", icon: <IconCourier />, roles: ["SUPER_ADMIN", "ADMIN", "MANAGER", "WAREHOUSE"] },
-  { label: "Warehouses", to: "/warehouses", icon: <IconWarehouse />, roles: ["SUPER_ADMIN", "ADMIN", "MANAGER", "WAREHOUSE"] },
   { label: "Notifications", to: "/notifications", icon: <IconBell /> },
   { label: "Settings", to: "/settings", icon: <IconSettings /> },
 ];
