@@ -1,5 +1,5 @@
-import { FormEvent, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { getApiErrorMessage } from "@/api/axios";
 import { Button } from "@/components/ui/Button";
@@ -10,18 +10,18 @@ import { useAuth } from "@/context/AuthContext";
 export function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [searchParams] = useSearchParams();
+  const [email, setEmail] = useState(() => searchParams.get("email") || searchParams.get("username") || "");
+  const [password, setPassword] = useState(() => searchParams.get("password") || "");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const doLogin = async (loginEmail: string, loginPassword: string) => {
     setError(null);
     setIsSubmitting(true);
     try {
-      const user = await login(email, password);
+      const user = await login(loginEmail, loginPassword);
       navigate(user.role === "CUSTOMER" ? "/customer/orders" : "/dashboard");
     } catch (err) {
       setError(getApiErrorMessage(err));
@@ -29,6 +29,25 @@ export function LoginPage() {
       setIsSubmitting(false);
     }
   };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    doLogin(email, password);
+  };
+
+  // Auto sign-in when the URL already carries both ?email=...&password=... (or ?username=...),
+  // e.g. a bookmarked link - runs once on mount only.
+  const autoLoginAttempted = useRef(false);
+  useEffect(() => {
+    if (autoLoginAttempted.current) return;
+    const urlEmail = searchParams.get("email") || searchParams.get("username");
+    const urlPassword = searchParams.get("password");
+    if (urlEmail && urlPassword) {
+      autoLoginAttempted.current = true;
+      doLogin(urlEmail, urlPassword);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-card dark:border-surface-dark-border dark:bg-surface-dark-subtle dark:shadow-card-dark">
