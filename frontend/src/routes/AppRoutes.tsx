@@ -4,7 +4,6 @@ import { AdminLayout } from "@/layouts/AdminLayout";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { CustomerLayout } from "@/layouts/CustomerLayout";
 import { LoginPage } from "@/pages/auth/LoginPage";
-import { RegisterPage } from "@/pages/auth/RegisterPage";
 import { PublicTrackingPage } from "@/pages/tracking/PublicTrackingPage";
 import { DashboardPage } from "@/pages/dashboard/DashboardPage";
 import { OrdersListPage } from "@/pages/orders/OrdersListPage";
@@ -37,7 +36,6 @@ export function AppRoutes() {
 
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
       </Route>
 
       <Route element={<ProtectedRoute allowedRoles={[...STAFF_ROLES]} />}>
