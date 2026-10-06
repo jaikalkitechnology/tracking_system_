@@ -118,7 +118,7 @@ export function ReportsPage() {
                 {
                   header: "Product",
                   render: (p) => (
-                    <Link to={`/products/${p.product_id}`} className="flex items-center gap-3">
+                    <div className="flex items-center gap-3">
                       {p.image_url ? (
                         <img src={p.image_url} alt={p.name} className="h-9 w-9 shrink-0 rounded-lg border border-slate-200 object-cover dark:border-surface-dark-border" />
                       ) : (
@@ -126,8 +126,8 @@ export function ReportsPage() {
                           {p.name.trim().charAt(0).toUpperCase() || "?"}
                         </span>
                       )}
-                      <span className="font-medium text-brand-600 dark:text-brand-400">{p.name}</span>
-                    </Link>
+                      <span className="font-medium text-slate-800 dark:text-slate-200">{p.name}</span>
+                    </div>
                   ),
                 },
                 { header: "Category", render: (p) => p.category || "-" },

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 import { getApiErrorMessage } from "@/api/axios";
 import { productsApi } from "@/api/products";
@@ -192,17 +191,17 @@ export function ProductsListPage() {
                 {
                   header: "Product",
                   render: (p) => (
-                    <Link to={`/products/${p.id}`} className="flex items-center gap-3">
+                    <div className="flex items-center gap-3">
                       <ProductTile name={p.name} imageUrl={p.image_url} />
                       <span>
-                        <span className="block font-medium text-brand-600 dark:text-brand-400">{p.name}</span>
+                        <span className="block font-medium text-slate-800 dark:text-slate-200">{p.name}</span>
                         {p.description && (
                           <span className="block max-w-xs truncate text-xs text-slate-500 dark:text-slate-400">
                             {p.description}
                           </span>
                         )}
                       </span>
-                    </Link>
+                    </div>
                   ),
                 },
                 { header: "SKU", render: (p) => p.sku },
@@ -220,17 +219,6 @@ export function ProductsListPage() {
                 { header: "Price", render: (p) => formatCurrency(p.price) },
                 { header: "Stock", render: (p) => p.stock_quantity },
                 { header: "Status", render: (p) => <Badge status={p.stock_status} /> },
-                {
-                  header: "Actions",
-                  render: (p) => (
-                    <Link
-                      to={`/products/${p.id}`}
-                      className="inline-flex items-center rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-50 dark:border-surface-dark-border dark:text-slate-200 dark:hover:bg-white/5"
-                    >
-                      Edit
-                    </Link>
-                  ),
-                },
               ]}
             />
             <Pagination page={data.page} pages={data.pages} total={data.total} onPageChange={setPage} />

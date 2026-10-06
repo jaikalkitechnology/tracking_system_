@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 import { getApiErrorMessage } from "@/api/axios";
 import { productsApi } from "@/api/products";
@@ -169,10 +168,10 @@ export function InventoryPage() {
                   {
                     header: "Product",
                     render: (p) => (
-                      <Link to={`/products/${p.id}`} className="flex items-center gap-3">
+                      <div className="flex items-center gap-3">
                         <ProductTile name={p.name} imageUrl={p.image_url} />
-                        <span className="font-medium text-brand-600 dark:text-brand-400">{p.name}</span>
-                      </Link>
+                        <span className="font-medium text-slate-800 dark:text-slate-200">{p.name}</span>
+                      </div>
                     ),
                   },
                   { header: "SKU", render: (p) => p.sku },
@@ -199,7 +198,7 @@ export function InventoryPage() {
             ) : (
               <CardBody className="space-y-3">
                 {lowStockItems.map((p) => (
-                  <Link key={p.id} to={`/products/${p.id}`} className="flex items-center gap-3">
+                  <div key={p.id} className="flex items-center gap-3">
                     <ProductTile name={p.name} imageUrl={p.image_url} />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-medium text-slate-800 dark:text-slate-200">{p.name}</span>
@@ -208,7 +207,7 @@ export function InventoryPage() {
                     <span className="shrink-0 rounded-full bg-amber-100 px-2 py-1 text-xs font-medium text-amber-800 dark:bg-amber-500/15 dark:text-amber-300">
                       {p.stock_quantity} left
                     </span>
-                  </Link>
+                  </div>
                 ))}
               </CardBody>
             )}
@@ -226,12 +225,12 @@ export function InventoryPage() {
             ) : (
               <CardBody className="space-y-3">
                 {recentlyUpdated.map((p) => (
-                  <Link key={p.id} to={`/products/${p.id}`} className="flex items-center justify-between gap-3">
+                  <div key={p.id} className="flex items-center justify-between gap-3">
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-medium text-slate-800 dark:text-slate-200">{p.name}</span>
                       <span className="block text-xs text-slate-400 dark:text-slate-500">{formatDateTime(p.updated_at)}</span>
                     </span>
-                  </Link>
+                  </div>
                 ))}
               </CardBody>
             )}
