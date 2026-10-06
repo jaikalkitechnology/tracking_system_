@@ -9,6 +9,7 @@ from app.models.order import Order, OrderStatus, PaymentStatus
 from app.models.order_item import OrderItem
 from app.models.product import Product
 from app.schemas.order import OrderCreate, OrderUpdate
+from app.services.notification_service import create_notifications_for_new_order
 from app.utils.response import AppError
 
 
@@ -62,6 +63,10 @@ def create_order(db: Session, payload: OrderCreate, created_by_user_id: int | No
 
     order.subtotal_amount = subtotal_amount
     order.total_amount = subtotal_amount + payload.shipping_amount + payload.tax_amount - payload.discount_amount
+    db.flush()
+
+    create_notifications_for_new_order(db, order)
+
     db.commit()
     db.refresh(order)
     return order

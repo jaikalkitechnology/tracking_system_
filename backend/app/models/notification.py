@@ -8,6 +8,7 @@ from app.models.mixins import TimestampMixin
 
 
 class NotificationType(str, enum.Enum):
+    NEW_ORDER = "NEW_ORDER"
     ORDER_CONFIRMED = "ORDER_CONFIRMED"
     SHIPMENT_PICKED_UP = "SHIPMENT_PICKED_UP"
     IN_TRANSIT = "IN_TRANSIT"

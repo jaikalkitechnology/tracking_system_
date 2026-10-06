@@ -1,7 +1,10 @@
 from sqlalchemy.orm import Session
 
+from app.core.permissions import STAFF_ROLES
 from app.models.notification import Notification, NotificationType
+from app.models.order import Order
 from app.models.shipment import Shipment, ShipmentStatus
+from app.models.user import User
 
 STATUS_TO_NOTIFICATION: dict[ShipmentStatus, NotificationType] = {
     ShipmentStatus.ORDER_CONFIRMED: NotificationType.ORDER_CONFIRMED,
@@ -33,3 +36,25 @@ def create_notification_for_shipment_event(db: Session, shipment: Shipment, titl
     )
     db.add(notification)
     return notification
+
+
+def create_notifications_for_new_order(db: Session, order: Order) -> None:
+    """Notifies every staff user (admin/manager/warehouse) that a new order came in."""
+    staff_ids = db.query(User.id).filter(User.role.in_(STAFF_ROLES)).all()
+    if not staff_ids:
+        return
+
+    customer_name = order.customer.name if order.customer else "A customer"
+    message = f"{customer_name} placed order {order.order_number} for ₹{float(order.total_amount):.2f}."
+
+    for (staff_id,) in staff_ids:
+        db.add(
+            Notification(
+                user_id=staff_id,
+                shipment_id=None,
+                type=NotificationType.NEW_ORDER,
+                title="New Order",
+                message=message,
+                is_read=False,
+            )
+        )

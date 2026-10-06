@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/Button";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { IconLogout } from "@/components/ui/icons";
+import { NotificationBell } from "@/components/layout/NotificationBell";
 import { useAuth } from "@/context/AuthContext";
 
 export function Topbar() {
@@ -27,6 +28,7 @@ export function Topbar() {
         Welcome back{user ? `, ${user.name.split(" ")[0]}` : ""}
       </div>
       <div className="flex items-center gap-3">
+        <NotificationBell />
         <ThemeToggle />
         <div className="flex items-center gap-2 rounded-full border border-slate-200 py-1 pl-1 pr-3 dark:border-surface-dark-border">
           <div className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-700 dark:bg-brand-500/20 dark:text-brand-300">

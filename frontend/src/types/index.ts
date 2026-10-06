@@ -239,6 +239,7 @@ export interface Warehouse {
 }
 
 export type NotificationType =
+  | "NEW_ORDER"
   | "ORDER_CONFIRMED"
   | "SHIPMENT_PICKED_UP"
   | "IN_TRANSIT"

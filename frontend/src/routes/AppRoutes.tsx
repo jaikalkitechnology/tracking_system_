@@ -14,7 +14,6 @@ import { ShipmentDetailPage } from "@/pages/shipments/ShipmentDetailPage";
 import { CustomersListPage } from "@/pages/customers/CustomersListPage";
 import { CustomerDetailPage } from "@/pages/customers/CustomerDetailPage";
 import { ProductsListPage } from "@/pages/products/ProductsListPage";
-import { NotificationsPage } from "@/pages/notifications/NotificationsPage";
 import { SettingsPage } from "@/pages/settings/SettingsPage";
 import { ReportsPage } from "@/pages/reports/ReportsPage";
 import { InventoryPage } from "@/pages/inventory/InventoryPage";
@@ -50,7 +49,6 @@ export function AppRoutes() {
           <Route path="/customers" element={<CustomersListPage />} />
           <Route path="/customers/:id" element={<CustomerDetailPage />} />
           <Route path="/products" element={<ProductsListPage />} />
-          <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Route>
       </Route>

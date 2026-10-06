@@ -8,7 +8,6 @@ import {
   IconInventory,
   IconOrders,
   IconProducts,
-  IconBell,
   IconReports,
   IconSettings,
   IconShipments,
@@ -30,7 +29,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Customers", to: "/customers", icon: <IconCustomers />, roles: ["SUPER_ADMIN", "ADMIN", "MANAGER", "WAREHOUSE"] },
   { label: "Products", to: "/products", icon: <IconProducts /> },
   { label: "Inventory", to: "/inventory", icon: <IconInventory />, roles: ["SUPER_ADMIN", "ADMIN", "MANAGER", "WAREHOUSE"] },
-  { label: "Notifications", to: "/notifications", icon: <IconBell /> },
   { label: "Settings", to: "/settings", icon: <IconSettings /> },
 ];
 
