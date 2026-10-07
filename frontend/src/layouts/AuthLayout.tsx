@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import vastraliyaLogo from "@/assets/vastraliya-logo.webp";
 
 export function AuthLayout() {
   return (
@@ -10,14 +11,8 @@ export function AuthLayout() {
       </div>
       <div className="flex flex-1 items-center justify-center px-4 pb-16">
         <div className="w-full max-w-sm">
-          <div className="mb-6 text-center">
-            <div className="inline-flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
-                V
-              </div>
-              <span className="text-2xl font-bold text-brand-700 dark:text-brand-400">Vastraliya</span>
-            </div>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Vastraliya Tracking System</p>
+          <div className="mb-6 flex justify-center">
+            <img src={vastraliyaLogo} alt="Vastraliya Tracking System" className="h-28 w-auto rounded-xl bg-white p-2 shadow-card dark:shadow-card-dark" />
           </div>
           <Outlet />
         </div>
