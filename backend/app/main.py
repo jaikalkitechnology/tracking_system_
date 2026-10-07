@@ -20,6 +20,7 @@ from app.api.v1 import (
     webhooks,
 )
 from app.core.config import settings
+from app.middleware.etag import ETagMiddleware
 from app.utils.response import AppError, app_error_handler, http_exception_handler, validation_exception_handler
 
 app = FastAPI(
@@ -51,7 +52,9 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["ETag"],
 )
+app.add_middleware(ETagMiddleware)
 
 app.add_exception_handler(AppError, app_error_handler)
 app.add_exception_handler(HTTPException, http_exception_handler)
