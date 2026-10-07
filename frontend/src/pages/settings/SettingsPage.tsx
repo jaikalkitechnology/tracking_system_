@@ -13,11 +13,10 @@ import { useAuth } from "@/context/AuthContext";
 import { PaginatedResponse, StoreSettings, User } from "@/types";
 import { formatDate } from "@/utils/format";
 
-type Tab = "general" | "payment" | "notifications" | "users";
+type Tab = "general" | "notifications" | "users";
 
 const TABS: { key: Tab; label: string }[] = [
   { key: "general", label: "General" },
-  { key: "payment", label: "Payment" },
   { key: "notifications", label: "Notifications" },
   { key: "users", label: "Users" },
 ];
@@ -124,32 +123,52 @@ export function SettingsPage() {
       </div>
 
       {tab === "general" && (
-        <Card className="max-w-xl">
-          <CardHeader>
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Store Preferences</h2>
-          </CardHeader>
-          <CardBody className="divide-y divide-slate-100 dark:divide-surface-dark-border">
-            <Toggle checked={form.allow_guest_checkout} onChange={(v) => set("allow_guest_checkout", v)} label="Allow Guest Checkout" />
-            <Toggle checked={form.show_low_stock_alerts} onChange={(v) => set("show_low_stock_alerts", v)} label="Show Low Stock Alerts" />
-            <Toggle checked={form.enable_product_reviews} onChange={(v) => set("enable_product_reviews", v)} label="Enable Product Reviews" />
-            <Toggle checked={form.enable_inventory_tracking} onChange={(v) => set("enable_inventory_tracking", v)} label="Enable Inventory Tracking" />
-            <Toggle checked={form.maintenance_mode} onChange={(v) => set("maintenance_mode", v)} label="Maintenance Mode" />
-          </CardBody>
-        </Card>
-      )}
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          <Card className="max-w-xl">
+            <CardHeader>
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Admin Details</h2>
+            </CardHeader>
+            <CardBody className="space-y-3 text-sm">
+              <div className="flex justify-between">
+                <span className="text-slate-500 dark:text-slate-400">Name</span>
+                <span className="font-medium text-slate-800 dark:text-slate-200">{user?.name}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500 dark:text-slate-400">Email</span>
+                <span className="font-medium text-slate-800 dark:text-slate-200">{user?.email}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500 dark:text-slate-400">Phone</span>
+                <span className="font-medium text-slate-800 dark:text-slate-200">{user?.phone || "-"}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-500 dark:text-slate-400">Role</span>
+                <Badge status={user?.role} />
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-500 dark:text-slate-400">Status</span>
+                <Badge status={user?.status} />
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500 dark:text-slate-400">Joined</span>
+                <span className="font-medium text-slate-800 dark:text-slate-200">{user ? formatDate(user.created_at) : "-"}</span>
+              </div>
+            </CardBody>
+          </Card>
 
-      {tab === "payment" && (
-        <Card className="max-w-xl">
-          <CardHeader>
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Payment</h2>
-          </CardHeader>
-          <CardBody>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              Orders accept Online Payment or Cash on Delivery, chosen per order at checkout. No payment gateway is
-              connected to this admin yet.
-            </p>
-          </CardBody>
-        </Card>
+          <Card className="max-w-xl">
+            <CardHeader>
+              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Store Preferences</h2>
+            </CardHeader>
+            <CardBody className="divide-y divide-slate-100 dark:divide-surface-dark-border">
+              <Toggle checked={form.allow_guest_checkout} onChange={(v) => set("allow_guest_checkout", v)} label="Allow Guest Checkout" />
+              <Toggle checked={form.show_low_stock_alerts} onChange={(v) => set("show_low_stock_alerts", v)} label="Show Low Stock Alerts" />
+              <Toggle checked={form.enable_product_reviews} onChange={(v) => set("enable_product_reviews", v)} label="Enable Product Reviews" />
+              <Toggle checked={form.enable_inventory_tracking} onChange={(v) => set("enable_inventory_tracking", v)} label="Enable Inventory Tracking" />
+              <Toggle checked={form.maintenance_mode} onChange={(v) => set("maintenance_mode", v)} label="Maintenance Mode" />
+            </CardBody>
+          </Card>
+        </div>
       )}
 
       {tab === "notifications" && (
