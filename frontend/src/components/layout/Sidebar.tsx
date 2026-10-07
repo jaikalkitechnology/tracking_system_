@@ -13,6 +13,7 @@ import {
   IconShipments,
 } from "@/components/ui/icons";
 import { ReactNode } from "react";
+import vastraliyaLogo from "@/assets/vastraliya-logo.webp";
 
 interface NavItem {
   label: string;
@@ -40,9 +41,7 @@ export function Sidebar() {
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white dark:border-surface-dark-border dark:bg-surface-dark-subtle md:flex">
       <div className="flex h-16 items-center gap-2 border-b border-slate-100 px-5 dark:border-surface-dark-border">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
-          V
-        </div>
+        <img src={vastraliyaLogo} alt="Vastraliya Tracking System" className="h-10 w-auto rounded-lg bg-white p-0.5" />
         <span className="text-lg font-bold text-slate-900 dark:text-slate-50">Vastraliya</span>
       </div>
       <nav className="flex-1 space-y-1 overflow-y-auto p-3">
