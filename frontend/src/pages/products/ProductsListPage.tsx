@@ -54,6 +54,7 @@ export function ProductsListPage() {
   const [category, setCategory] = useState("");
   const [stockStatus, setStockStatus] = useState("");
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [data, setData] = useState<PaginatedResponse<Product> | null>(null);
   const [categories, setCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -66,7 +67,7 @@ export function ProductsListPage() {
     productsApi
       .list({
         page,
-        limit: 10,
+        limit,
         search: debouncedSearch || undefined,
         status: status || undefined,
         category: category || undefined,
@@ -77,7 +78,7 @@ export function ProductsListPage() {
       .finally(() => setIsLoading(false));
   };
 
-  useEffect(load, [page, debouncedSearch, status, category, stockStatus]);
+  useEffect(load, [page, limit, debouncedSearch, status, category, stockStatus]);
 
   const loadCategories = () => {
     productsApi.categories().then(setCategories).catch(() => setCategories([]));
@@ -218,7 +219,17 @@ export function ProductsListPage() {
                 { header: "Price", render: (p) => formatCurrency(p.price) },
               ]}
             />
-            <Pagination page={data.page} pages={data.pages} total={data.total} onPageChange={setPage} />
+            <Pagination
+              page={data.page}
+              pages={data.pages}
+              total={data.total}
+              onPageChange={setPage}
+              limit={limit}
+              onLimitChange={(l) => {
+                setPage(1);
+                setLimit(l);
+              }}
+            />
           </>
         )}
       </Card>

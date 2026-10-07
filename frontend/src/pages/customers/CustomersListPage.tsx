@@ -48,6 +48,7 @@ export function CustomersListPage() {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebouncedValue(search);
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [data, setData] = useState<PaginatedResponse<Customer> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +63,7 @@ export function CustomersListPage() {
     setIsLoading(true);
     setError(null);
     customersApi
-      .list({ page, limit: 10, search: debouncedSearch || undefined })
+      .list({ page, limit, search: debouncedSearch || undefined })
       .then((result) => {
         setData(result);
         if (result.items.length > 0 && selectedId === null) {
@@ -73,7 +74,7 @@ export function CustomersListPage() {
       .finally(() => setIsLoading(false));
   };
 
-  useEffect(load, [page, debouncedSearch]);
+  useEffect(load, [page, limit, debouncedSearch]);
 
   useEffect(() => {
     Promise.all([
@@ -181,7 +182,17 @@ export function CustomersListPage() {
                   { header: "Status", render: (c) => <Badge status={c.status} /> },
                 ]}
               />
-              <Pagination page={data.page} pages={data.pages} total={data.total} onPageChange={setPage} />
+              <Pagination
+                page={data.page}
+                pages={data.pages}
+                total={data.total}
+                onPageChange={setPage}
+                limit={limit}
+                onLimitChange={(l) => {
+                  setPage(1);
+                  setLimit(l);
+                }}
+              />
             </>
           )}
         </Card>

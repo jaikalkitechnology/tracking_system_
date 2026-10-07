@@ -42,6 +42,7 @@ export function ShipmentsListPage() {
   const [status, setStatus] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [data, setData] = useState<PaginatedResponse<Shipment> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -53,7 +54,7 @@ export function ShipmentsListPage() {
     shipmentsApi
       .list({
         page,
-        limit: 10,
+        limit,
         tracking_number: debouncedTracking || undefined,
         order_number: debouncedOrder || undefined,
         status: status || undefined,
@@ -62,7 +63,7 @@ export function ShipmentsListPage() {
       .then(setData)
       .catch((err) => setError(getApiErrorMessage(err)))
       .finally(() => setIsLoading(false));
-  }, [page, debouncedTracking, debouncedOrder, status, paymentMethod]);
+  }, [page, limit, debouncedTracking, debouncedOrder, status, paymentMethod]);
 
   useEffect(() => {
     dashboardApi.shipmentStatistics().then(setStatistics).catch(() => setStatistics([]));
@@ -179,7 +180,17 @@ export function ShipmentsListPage() {
                 },
               ]}
             />
-            <Pagination page={data.page} pages={data.pages} total={data.total} onPageChange={setPage} />
+            <Pagination
+              page={data.page}
+              pages={data.pages}
+              total={data.total}
+              onPageChange={setPage}
+              limit={limit}
+              onLimitChange={(l) => {
+                setPage(1);
+                setLimit(l);
+              }}
+            />
           </>
         )}
       </Card>

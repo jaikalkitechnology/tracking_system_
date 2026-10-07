@@ -29,6 +29,7 @@ export function OrdersListPage() {
   const debouncedSearch = useDebouncedValue(search);
   const [status, setStatus] = useState("");
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [data, setData] = useState<PaginatedResponse<Order> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,13 +39,13 @@ export function OrdersListPage() {
     setIsLoading(true);
     setError(null);
     ordersApi
-      .list({ page, limit: 10, search: debouncedSearch || undefined, order_status: status || undefined })
+      .list({ page, limit, search: debouncedSearch || undefined, order_status: status || undefined })
       .then(setData)
       .catch((err) => setError(getApiErrorMessage(err)))
       .finally(() => setIsLoading(false));
   };
 
-  useEffect(load, [page, debouncedSearch, status]);
+  useEffect(load, [page, limit, debouncedSearch, status]);
 
   useEffect(() => {
     if (!isStaff) return;
@@ -156,7 +157,17 @@ export function OrdersListPage() {
                 },
               ]}
             />
-            <Pagination page={data.page} pages={data.pages} total={data.total} onPageChange={setPage} />
+            <Pagination
+              page={data.page}
+              pages={data.pages}
+              total={data.total}
+              onPageChange={setPage}
+              limit={limit}
+              onLimitChange={(l) => {
+                setPage(1);
+                setLimit(l);
+              }}
+            />
           </>
         )}
       </Card>

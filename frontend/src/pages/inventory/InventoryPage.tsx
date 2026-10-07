@@ -31,6 +31,7 @@ export function InventoryPage() {
   const [stockStatus, setStockStatus] = useState("");
   const [categories, setCategories] = useState<string[]>([]);
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
   const [data, setData] = useState<PaginatedResponse<Product> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +45,7 @@ export function InventoryPage() {
     productsApi
       .list({
         page,
-        limit: 10,
+        limit,
         search: debouncedSearch || undefined,
         category: category || undefined,
         stock_status: stockStatus || undefined,
@@ -54,7 +55,7 @@ export function InventoryPage() {
       .finally(() => setIsLoading(false));
   };
 
-  useEffect(load, [page, debouncedSearch, category, stockStatus]);
+  useEffect(load, [page, limit, debouncedSearch, category, stockStatus]);
 
   useEffect(() => {
     productsApi.categories().then(setCategories).catch(() => setCategories([]));
@@ -177,7 +178,17 @@ export function InventoryPage() {
                   { header: "Price", render: (p) => formatCurrency(p.price) },
                 ]}
               />
-              <Pagination page={data.page} pages={data.pages} total={data.total} onPageChange={setPage} />
+              <Pagination
+                page={data.page}
+                pages={data.pages}
+                total={data.total}
+                onPageChange={setPage}
+                limit={limit}
+                onLimitChange={(l) => {
+                  setPage(1);
+                  setLimit(l);
+                }}
+              />
             </>
           )}
         </Card>
