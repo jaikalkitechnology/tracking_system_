@@ -40,9 +40,8 @@ export function Sidebar() {
 
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white dark:border-surface-dark-border dark:bg-surface-dark-subtle md:flex">
-      <div className="flex h-16 items-center gap-2 border-b border-slate-100 px-5 dark:border-surface-dark-border">
-        <img src={vastraliyaLogo} alt="Vastraliya Tracking System" className="h-10 w-auto rounded-lg bg-white p-0.5" />
-        <span className="text-lg font-bold text-slate-900 dark:text-slate-50">Vastraliya</span>
+      <div className="flex h-24 items-center justify-center border-b border-slate-100 px-5 dark:border-surface-dark-border">
+        <img src={vastraliyaLogo} alt="Vastraliya Tracking System" className="h-20 w-auto rounded-lg bg-white p-1" />
       </div>
       <nav className="flex-1 space-y-1 overflow-y-auto p-3">
         {items.map((item) => (
