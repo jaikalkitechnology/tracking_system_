@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 import { getApiErrorMessage } from "@/api/axios";
 import { productsApi } from "@/api/products";
-import { Badge } from "@/components/ui/Badge";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { EmptyState, ErrorState } from "@/components/ui/EmptyState";
 import { Input, Select } from "@/components/ui/Input";
@@ -176,8 +175,6 @@ export function InventoryPage() {
                   },
                   { header: "SKU", render: (p) => p.sku },
                   { header: "Price", render: (p) => formatCurrency(p.price) },
-                  { header: "Stock", render: (p) => p.stock_quantity },
-                  { header: "Status", render: (p) => <Badge status={p.stock_status} /> },
                 ]}
               />
               <Pagination page={data.page} pages={data.pages} total={data.total} onPageChange={setPage} />
