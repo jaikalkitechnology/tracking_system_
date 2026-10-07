@@ -7,11 +7,11 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { ErrorState } from "@/components/ui/EmptyState";
-import { Input, Label, Select } from "@/components/ui/Input";
+import { Input, Label } from "@/components/ui/Input";
 import { LoadingState } from "@/components/ui/Spinner";
 import { DataTable } from "@/components/tables/DataTable";
 import { useAuth } from "@/context/AuthContext";
-import { PaginatedResponse, StoreSettings, User, UserRole } from "@/types";
+import { PaginatedResponse, StoreSettings, User } from "@/types";
 import { formatDate } from "@/utils/format";
 
 type Tab = "general" | "payment" | "notifications" | "users";
@@ -195,16 +195,15 @@ export function SettingsPage() {
         </Card>
       )}
 
-      {tab === "users" && <UsersTab isAdmin={!!isAdmin} />}
+      {tab === "users" && <UsersTab />}
     </div>
   );
 }
 
-function UsersTab({ isAdmin }: { isAdmin: boolean }) {
+function UsersTab() {
   const [data, setData] = useState<PaginatedResponse<User> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showCreate, setShowCreate] = useState(false);
 
   const load = () => {
     setIsLoading(true);
@@ -219,9 +218,8 @@ function UsersTab({ isAdmin }: { isAdmin: boolean }) {
 
   return (
     <Card>
-      <CardHeader className="flex items-center justify-between">
+      <CardHeader>
         <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Staff Users</h2>
-        {isAdmin && <Button onClick={() => setShowCreate(true)}>+ Add User</Button>}
       </CardHeader>
       {isLoading ? (
         <LoadingState />
@@ -246,91 +244,6 @@ function UsersTab({ isAdmin }: { isAdmin: boolean }) {
           ]}
         />
       )}
-
-      {showCreate && (
-        <CreateUserModal
-          onClose={() => setShowCreate(false)}
-          onCreated={() => {
-            setShowCreate(false);
-            load();
-          }}
-        />
-      )}
     </Card>
-  );
-}
-
-function CreateUserModal({ onClose, onCreated }: { onClose: () => void; onCreated: () => void }) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState<UserRole>("WAREHOUSE");
-  const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async () => {
-    setError(null);
-    if (!name || !email || !password) {
-      setError("Name, email and password are required");
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      await usersApi.create({ name, email, password, phone: phone || undefined, role });
-      onCreated();
-    } catch (err) {
-      setError(getApiErrorMessage(err));
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 px-4 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white shadow-xl dark:border-surface-dark-border dark:bg-surface-dark-subtle">
-        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 dark:border-surface-dark-border">
-          <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">Add Staff User</h3>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
-            ✕
-          </button>
-        </div>
-        <div className="space-y-3 px-5 py-4">
-          {error && <div className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-300">{error}</div>}
-          <div>
-            <Label>Name</Label>
-            <Input value={name} onChange={(e) => setName(e.target.value)} />
-          </div>
-          <div>
-            <Label>Email</Label>
-            <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          </div>
-          <div>
-            <Label>Phone</Label>
-            <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
-          </div>
-          <div>
-            <Label>Password</Label>
-            <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-          </div>
-          <div>
-            <Label>Role</Label>
-            <Select value={role} onChange={(e) => setRole(e.target.value as UserRole)}>
-              <option value="ADMIN">Admin</option>
-              <option value="MANAGER">Manager</option>
-              <option value="WAREHOUSE">Warehouse</option>
-            </Select>
-          </div>
-        </div>
-        <div className="flex justify-end gap-2 border-t border-slate-100 px-5 py-4 dark:border-surface-dark-border">
-          <Button variant="secondary" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} disabled={isSubmitting}>
-            {isSubmitting ? "Creating..." : "Create User"}
-          </Button>
-        </div>
-      </div>
-    </div>
   );
 }
