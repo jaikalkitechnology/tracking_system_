@@ -13,7 +13,7 @@ interface PaginationProps {
 }
 
 export function Pagination({ page, pages, total, onPageChange, limit, onLimitChange }: PaginationProps) {
-  if (pages <= 1 && !onLimitChange) return null;
+  if (total === 0) return null;
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 px-5 py-3 dark:border-surface-dark-border">
@@ -37,16 +37,14 @@ export function Pagination({ page, pages, total, onPageChange, limit, onLimitCha
             </Select>
           </label>
         )}
-        {pages > 1 && (
-          <div className="flex gap-2">
-            <Button variant="secondary" disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
-              Previous
-            </Button>
-            <Button variant="secondary" disabled={page >= pages} onClick={() => onPageChange(page + 1)}>
-              Next
-            </Button>
-          </div>
-        )}
+        <div className="flex gap-2">
+          <Button variant="secondary" disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
+            Previous
+          </Button>
+          <Button variant="secondary" disabled={page >= pages} onClick={() => onPageChange(page + 1)}>
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );
