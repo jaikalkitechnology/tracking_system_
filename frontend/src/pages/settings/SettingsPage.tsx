@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { ErrorState } from "@/components/ui/EmptyState";
-import { Input, Label } from "@/components/ui/Input";
 import { LoadingState } from "@/components/ui/Spinner";
 import { DataTable } from "@/components/tables/DataTable";
 import { useAuth } from "@/context/AuthContext";
@@ -125,48 +124,18 @@ export function SettingsPage() {
       </div>
 
       {tab === "general" && (
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Store Information</h2>
-            </CardHeader>
-            <CardBody className="space-y-3">
-              <div>
-                <Label>Store Name</Label>
-                <Input value={form.store_name} onChange={(e) => set("store_name", e.target.value)} />
-              </div>
-              <div>
-                <Label>Store Email</Label>
-                <Input type="email" value={form.store_email || ""} onChange={(e) => set("store_email", e.target.value)} />
-              </div>
-              <div>
-                <Label>Store Phone</Label>
-                <Input value={form.store_phone || ""} onChange={(e) => set("store_phone", e.target.value)} />
-              </div>
-              <div>
-                <Label>Website</Label>
-                <Input value={form.website || ""} onChange={(e) => set("website", e.target.value)} />
-              </div>
-              <div>
-                <Label>Store Logo URL</Label>
-                <Input value={form.logo_url || ""} onChange={(e) => set("logo_url", e.target.value)} placeholder="https://..." />
-              </div>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Store Preferences</h2>
-            </CardHeader>
-            <CardBody className="divide-y divide-slate-100 dark:divide-surface-dark-border">
-              <Toggle checked={form.allow_guest_checkout} onChange={(v) => set("allow_guest_checkout", v)} label="Allow Guest Checkout" />
-              <Toggle checked={form.show_low_stock_alerts} onChange={(v) => set("show_low_stock_alerts", v)} label="Show Low Stock Alerts" />
-              <Toggle checked={form.enable_product_reviews} onChange={(v) => set("enable_product_reviews", v)} label="Enable Product Reviews" />
-              <Toggle checked={form.enable_inventory_tracking} onChange={(v) => set("enable_inventory_tracking", v)} label="Enable Inventory Tracking" />
-              <Toggle checked={form.maintenance_mode} onChange={(v) => set("maintenance_mode", v)} label="Maintenance Mode" />
-            </CardBody>
-          </Card>
-        </div>
+        <Card className="max-w-xl">
+          <CardHeader>
+            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Store Preferences</h2>
+          </CardHeader>
+          <CardBody className="divide-y divide-slate-100 dark:divide-surface-dark-border">
+            <Toggle checked={form.allow_guest_checkout} onChange={(v) => set("allow_guest_checkout", v)} label="Allow Guest Checkout" />
+            <Toggle checked={form.show_low_stock_alerts} onChange={(v) => set("show_low_stock_alerts", v)} label="Show Low Stock Alerts" />
+            <Toggle checked={form.enable_product_reviews} onChange={(v) => set("enable_product_reviews", v)} label="Enable Product Reviews" />
+            <Toggle checked={form.enable_inventory_tracking} onChange={(v) => set("enable_inventory_tracking", v)} label="Enable Inventory Tracking" />
+            <Toggle checked={form.maintenance_mode} onChange={(v) => set("maintenance_mode", v)} label="Maintenance Mode" />
+          </CardBody>
+        </Card>
       )}
 
       {tab === "payment" && (
