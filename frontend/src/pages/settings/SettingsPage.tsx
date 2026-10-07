@@ -14,13 +14,10 @@ import { useAuth } from "@/context/AuthContext";
 import { PaginatedResponse, StoreSettings, User, UserRole } from "@/types";
 import { formatDate } from "@/utils/format";
 
-type Tab = "general" | "company" | "billing" | "shipping" | "payment" | "notifications" | "users";
+type Tab = "general" | "payment" | "notifications" | "users";
 
 const TABS: { key: Tab; label: string }[] = [
   { key: "general", label: "General" },
-  { key: "company", label: "Company" },
-  { key: "billing", label: "Billing & Tax" },
-  { key: "shipping", label: "Shipping" },
   { key: "payment", label: "Payment" },
   { key: "notifications", label: "Notifications" },
   { key: "users", label: "Users" },
@@ -170,138 +167,6 @@ export function SettingsPage() {
             </CardBody>
           </Card>
         </div>
-      )}
-
-      {tab === "company" && (
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Business Address</h2>
-            </CardHeader>
-            <CardBody className="space-y-3">
-              <div>
-                <Label>Address Line 1</Label>
-                <Input value={form.address_line1 || ""} onChange={(e) => set("address_line1", e.target.value)} />
-              </div>
-              <div>
-                <Label>Address Line 2</Label>
-                <Input value={form.address_line2 || ""} onChange={(e) => set("address_line2", e.target.value)} />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label>City</Label>
-                  <Input value={form.city || ""} onChange={(e) => set("city", e.target.value)} />
-                </div>
-                <div>
-                  <Label>State</Label>
-                  <Input value={form.state || ""} onChange={(e) => set("state", e.target.value)} />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label>PIN Code</Label>
-                  <Input value={form.pincode || ""} onChange={(e) => set("pincode", e.target.value)} />
-                </div>
-                <div>
-                  <Label>Country</Label>
-                  <Input value={form.country} onChange={(e) => set("country", e.target.value)} />
-                </div>
-              </div>
-            </CardBody>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Contact Person</h2>
-            </CardHeader>
-            <CardBody className="space-y-3">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label>Contact Name</Label>
-                  <Input value={form.contact_name || ""} onChange={(e) => set("contact_name", e.target.value)} />
-                </div>
-                <div>
-                  <Label>Designation</Label>
-                  <Input value={form.contact_designation || ""} onChange={(e) => set("contact_designation", e.target.value)} />
-                </div>
-              </div>
-              <div>
-                <Label>Contact Email</Label>
-                <Input type="email" value={form.contact_email || ""} onChange={(e) => set("contact_email", e.target.value)} />
-              </div>
-              <div>
-                <Label>Alternate Email</Label>
-                <Input type="email" value={form.contact_alternate_email || ""} onChange={(e) => set("contact_alternate_email", e.target.value)} />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <Label>Contact Number</Label>
-                  <Input value={form.contact_phone || ""} onChange={(e) => set("contact_phone", e.target.value)} />
-                </div>
-                <div>
-                  <Label>Alternate Number</Label>
-                  <Input value={form.contact_alternate_phone || ""} onChange={(e) => set("contact_alternate_phone", e.target.value)} />
-                </div>
-              </div>
-            </CardBody>
-          </Card>
-        </div>
-      )}
-
-      {tab === "billing" && (
-        <Card className="max-w-xl">
-          <CardHeader>
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Billing & Tax</h2>
-          </CardHeader>
-          <CardBody className="space-y-3">
-            <div>
-              <Label>Tax Rate (GST %)</Label>
-              <Input
-                type="number"
-                min={0}
-                max={100}
-                value={form.tax_rate_percent}
-                onChange={(e) => set("tax_rate_percent", Number(e.target.value) || 0)}
-              />
-            </div>
-            <div>
-              <Label>Currency</Label>
-              <Select value={form.currency} onChange={(e) => set("currency", e.target.value)}>
-                <option value="INR">INR (₹)</option>
-                <option value="USD">USD ($)</option>
-              </Select>
-            </div>
-          </CardBody>
-        </Card>
-      )}
-
-      {tab === "shipping" && (
-        <Card className="max-w-xl">
-          <CardHeader>
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Shipping</h2>
-          </CardHeader>
-          <CardBody className="space-y-3">
-            <div>
-              <Label>Default Shipping Charges (₹)</Label>
-              <Input
-                type="number"
-                min={0}
-                value={form.default_shipping_charge}
-                onChange={(e) => set("default_shipping_charge", Number(e.target.value) || 0)}
-              />
-            </div>
-            <div>
-              <Label>Free Shipping Threshold (₹)</Label>
-              <Input
-                type="number"
-                min={0}
-                value={form.free_shipping_threshold ?? ""}
-                onChange={(e) => set("free_shipping_threshold", e.target.value ? Number(e.target.value) : null)}
-                placeholder="No free shipping threshold"
-              />
-            </div>
-          </CardBody>
-        </Card>
       )}
 
       {tab === "payment" && (
