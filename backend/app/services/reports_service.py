@@ -83,9 +83,9 @@ def get_order_status_breakdown(db: Session) -> list[dict]:
     ]
 
 
-def get_top_selling_products(db: Session, days: int = 30, limit: int = 5) -> list[dict]:
+def get_top_selling_products(db: Session, days: int = 30, page: int = 1, limit: int = 5) -> dict:
     since = datetime.now(timezone.utc) - timedelta(days=days)
-    rows = (
+    base_query = (
         db.query(
             Product.id,
             Product.name,
@@ -98,11 +98,15 @@ def get_top_selling_products(db: Session, days: int = 30, limit: int = 5) -> lis
         .join(Order, OrderItem.order_id == Order.id)
         .filter(Order.created_at >= since)
         .group_by(Product.id, Product.name, Product.category, Product.image_url)
-        .order_by(func.sum(OrderItem.quantity).desc())
+    )
+    total = base_query.count()
+    rows = (
+        base_query.order_by(func.sum(OrderItem.quantity).desc())
+        .offset((page - 1) * limit)
         .limit(limit)
         .all()
     )
-    return [
+    items = [
         {
             "product_id": pid,
             "name": name,
@@ -113,11 +117,13 @@ def get_top_selling_products(db: Session, days: int = 30, limit: int = 5) -> lis
         }
         for pid, name, category, image_url, sold, revenue in rows
     ]
+    pages = (total + limit - 1) // limit if total else 0
+    return {"items": items, "total": total, "page": page, "limit": limit, "pages": pages}
 
 
-def get_sales_by_category(db: Session, days: int = 30) -> list[dict]:
+def get_sales_by_category(db: Session, days: int = 30, page: int = 1, limit: int = 5) -> dict:
     since = datetime.now(timezone.utc) - timedelta(days=days)
-    rows = (
+    base_query = (
         db.query(
             Product.category,
             func.count(func.distinct(Order.id)).label("orders"),
@@ -127,9 +133,14 @@ def get_sales_by_category(db: Session, days: int = 30) -> list[dict]:
         .join(Order, OrderItem.order_id == Order.id)
         .filter(Order.created_at >= since, Product.category.isnot(None))
         .group_by(Product.category)
-        .order_by(func.sum(OrderItem.total).desc())
+    )
+    total = base_query.count()
+    rows = (
+        base_query.order_by(func.sum(OrderItem.total).desc())
+        .offset((page - 1) * limit)
+        .limit(limit)
         .all()
     )
-    return [
-        {"category": category, "orders": orders, "revenue": float(revenue)} for category, orders, revenue in rows
-    ]
+    items = [{"category": category, "orders": orders, "revenue": float(revenue)} for category, orders, revenue in rows]
+    pages = (total + limit - 1) // limit if total else 0
+    return {"items": items, "total": total, "page": page, "limit": limit, "pages": pages}

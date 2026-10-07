@@ -33,11 +33,21 @@ def order_status_breakdown(db: Session = Depends(get_db), _staff: User = Depends
 
 @router.get("/top-selling-products")
 def top_selling_products(
-    days: int = 30, limit: int = 5, db: Session = Depends(get_db), _staff: User = Depends(require_staff)
+    days: int = 30,
+    page: int = 1,
+    limit: int = 5,
+    db: Session = Depends(get_db),
+    _staff: User = Depends(require_staff),
 ):
-    return get_top_selling_products(db, days, limit)
+    return get_top_selling_products(db, days, page, limit)
 
 
 @router.get("/sales-by-category")
-def sales_by_category(days: int = 30, db: Session = Depends(get_db), _staff: User = Depends(require_staff)):
-    return get_sales_by_category(db, days)
+def sales_by_category(
+    days: int = 30,
+    page: int = 1,
+    limit: int = 5,
+    db: Session = Depends(get_db),
+    _staff: User = Depends(require_staff),
+):
+    return get_sales_by_category(db, days, page, limit)
