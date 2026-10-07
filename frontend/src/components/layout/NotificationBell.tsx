@@ -58,12 +58,21 @@ export function NotificationBell() {
     if (n.shipment_id) {
       setOpen(false);
       navigate(`/shipments/${n.shipment_id}`);
+    } else if (n.order_id) {
+      setOpen(false);
+      navigate(`/orders/${n.order_id}`);
     }
   };
 
   const handleMarkAllRead = async () => {
     await notificationsApi.markAllRead();
     setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+    setUnreadCount(0);
+  };
+
+  const handleClearAll = async () => {
+    await notificationsApi.clearAll();
+    setNotifications([]);
     setUnreadCount(0);
   };
 
@@ -86,14 +95,24 @@ export function NotificationBell() {
         <div className="absolute right-0 z-50 mt-2 w-80 rounded-xl border border-slate-200 bg-white shadow-xl dark:border-surface-dark-border dark:bg-surface-dark-subtle">
           <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3 dark:border-surface-dark-border">
             <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Notifications</h3>
-            {unreadCount > 0 && (
-              <button
-                onClick={handleMarkAllRead}
-                className="text-xs font-medium text-brand-600 hover:underline dark:text-brand-400"
-              >
-                Mark all as read
-              </button>
-            )}
+            <div className="flex items-center gap-3">
+              {unreadCount > 0 && (
+                <button
+                  onClick={handleMarkAllRead}
+                  className="text-xs font-medium text-brand-600 hover:underline dark:text-brand-400"
+                >
+                  Mark all as read
+                </button>
+              )}
+              {notifications.length > 0 && (
+                <button
+                  onClick={handleClearAll}
+                  className="text-xs font-medium text-slate-500 hover:underline dark:text-slate-400"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
           </div>
           <div className="max-h-96 overflow-y-auto">
             {isLoading ? (
@@ -119,6 +138,15 @@ export function NotificationBell() {
               </ul>
             )}
           </div>
+          <button
+            onClick={() => {
+              setOpen(false);
+              navigate("/notifications");
+            }}
+            className="block w-full border-t border-slate-100 px-4 py-2.5 text-center text-xs font-medium text-brand-600 hover:underline dark:border-surface-dark-border dark:text-brand-400"
+          >
+            View notification history
+          </button>
         </div>
       )}
     </div>

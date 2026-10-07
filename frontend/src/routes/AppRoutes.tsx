@@ -17,6 +17,7 @@ import { ProductsListPage } from "@/pages/products/ProductsListPage";
 import { SettingsPage } from "@/pages/settings/SettingsPage";
 import { ReportsPage } from "@/pages/reports/ReportsPage";
 import { InventoryPage } from "@/pages/inventory/InventoryPage";
+import { NotificationsPage } from "@/pages/notifications/NotificationsPage";
 import { CustomerOrdersPage } from "@/pages/customer/CustomerOrdersPage";
 import { CustomerOrderDetailPage } from "@/pages/customer/CustomerOrderDetailPage";
 import { CustomerShipmentDetailPage } from "@/pages/customer/CustomerShipmentDetailPage";
@@ -41,6 +42,7 @@ export function AppRoutes() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/reports" element={<ReportsPage />} />
           <Route path="/inventory" element={<InventoryPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/orders" element={<OrdersListPage />} />
           <Route path="/orders/new" element={<CreateOrderPage />} />
           <Route path="/orders/:id" element={<OrderDetailPage />} />

@@ -11,6 +11,7 @@ class NotificationResponse(BaseModel):
     id: int
     user_id: int
     shipment_id: int | None
+    order_id: int | None
     type: NotificationType
     title: str
     message: str

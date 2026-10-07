@@ -52,6 +52,7 @@ def create_notifications_for_new_order(db: Session, order: Order) -> None:
             Notification(
                 user_id=staff_id,
                 shipment_id=None,
+                order_id=order.id,
                 type=NotificationType.NEW_ORDER,
                 title="New Order",
                 message=message,

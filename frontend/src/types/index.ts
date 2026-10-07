@@ -252,6 +252,7 @@ export interface Notification {
   id: number;
   user_id: number;
   shipment_id: number | null;
+  order_id: number | null;
   type: NotificationType;
   title: string;
   message: string;
