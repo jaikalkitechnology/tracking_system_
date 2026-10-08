@@ -26,3 +26,11 @@ class Customer(TimestampMixin, Base):
     user = relationship("User", back_populates="customer")
     addresses = relationship("Address", back_populates="customer", cascade="all, delete-orphan")
     orders = relationship("Order", back_populates="customer")
+
+    @property
+    def total_orders(self) -> int:
+        return len(self.orders)
+
+    @property
+    def total_spent(self) -> float:
+        return sum(float(order.total_amount) for order in self.orders)

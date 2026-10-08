@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { getApiErrorMessage } from "@/api/axios";
 import { notificationsApi } from "@/api/notifications";
@@ -11,6 +12,7 @@ import { Notification, PaginatedResponse } from "@/types";
 import { formatDateTime } from "@/utils/format";
 
 export function NotificationsPage() {
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [data, setData] = useState<PaginatedResponse<Notification> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,6 +40,22 @@ export function NotificationsPage() {
     load();
   };
 
+  const handleClearAll = async () => {
+    await notificationsApi.clearAll();
+    load();
+  };
+
+  const goToNotification = async (n: Notification) => {
+    if (!n.is_read) await notificationsApi.markRead(n.id);
+    if (n.shipment_id) {
+      navigate(`/shipments/${n.shipment_id}`);
+    } else if (n.order_id) {
+      navigate(`/orders/${n.order_id}`);
+    } else {
+      load();
+    }
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -45,9 +63,14 @@ export function NotificationsPage() {
           <h1 className="text-xl font-semibold text-slate-900 dark:text-slate-50">Notifications</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">Updates about your orders and shipments.</p>
         </div>
-        <Button variant="secondary" onClick={handleMarkAllRead}>
-          Mark all as read
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="secondary" onClick={handleMarkAllRead}>
+            Mark all as read
+          </Button>
+          <Button variant="secondary" onClick={handleClearAll}>
+            Clear
+          </Button>
+        </div>
       </div>
 
       <Card>
@@ -69,11 +92,11 @@ export function NotificationsPage() {
                     !n.is_read ? "bg-brand-50/40 dark:bg-brand-500/10" : ""
                   }`}
                 >
-                  <div>
+                  <button onClick={() => goToNotification(n)} className="flex-1 text-left">
                     <p className="text-sm font-medium text-slate-900 dark:text-slate-100">{n.title}</p>
                     <p className="mt-0.5 text-sm text-slate-600 dark:text-slate-300">{n.message}</p>
                     <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">{formatDateTime(n.created_at)}</p>
-                  </div>
+                  </button>
                   {!n.is_read && (
                     <button
                       onClick={() => handleMarkRead(n.id)}

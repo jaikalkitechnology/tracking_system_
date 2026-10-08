@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Query
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.core.permissions import get_current_user
@@ -27,9 +28,31 @@ def list_addresses(
     return db.query(Address).filter(Address.customer_id == customer_id).all()
 
 
+def _norm(value: str | None):
+    return func.lower(func.trim(value)) if value else None
+
+
 @router.post("", response_model=AddressResponse, status_code=201)
 def create_address(payload: AddressCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     _assert_can_access_customer(payload.customer_id, current_user, db)
+
+    # Reuse an existing address for this customer instead of creating a duplicate
+    # (e.g. the same customer reordering with the same shipping address shouldn't
+    # pile up an identical address row every time).
+    existing = (
+        db.query(Address)
+        .filter(
+            Address.customer_id == payload.customer_id,
+            func.lower(func.trim(Address.address_line1)) == _norm(payload.address_line1),
+            func.lower(func.trim(Address.city)) == _norm(payload.city),
+            func.lower(func.trim(Address.state)) == _norm(payload.state),
+            func.lower(func.trim(Address.pincode)) == _norm(payload.pincode),
+        )
+        .first()
+    )
+    if existing:
+        return existing
+
     address = Address(**payload.model_dump())
     db.add(address)
     db.commit()

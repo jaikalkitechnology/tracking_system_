@@ -11,13 +11,16 @@ from app.api.v1 import (
     notifications,
     orders,
     products,
+    reports,
     shipments,
+    store_settings,
     tracking,
     users,
     warehouses,
     webhooks,
 )
 from app.core.config import settings
+from app.middleware.etag import ETagMiddleware
 from app.utils.response import AppError, app_error_handler, http_exception_handler, validation_exception_handler
 
 app = FastAPI(
@@ -38,6 +41,8 @@ app = FastAPI(
         {"name": "Notifications", "description": "User notifications."},
         {"name": "Dashboard", "description": "Aggregated statistics for the admin dashboard."},
         {"name": "Webhooks", "description": "Inbound courier status update webhooks."},
+        {"name": "Store Settings", "description": "Store configuration (admin only to update)."},
+        {"name": "Reports", "description": "Sales, order status and product performance reports."},
     ],
 )
 
@@ -47,7 +52,9 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["ETag"],
 )
+app.add_middleware(ETagMiddleware)
 
 app.add_exception_handler(AppError, app_error_handler)
 app.add_exception_handler(HTTPException, http_exception_handler)
@@ -68,6 +75,8 @@ app.include_router(warehouses.router, prefix=API_PREFIX)
 app.include_router(notifications.router, prefix=API_PREFIX)
 app.include_router(dashboard.router, prefix=API_PREFIX)
 app.include_router(webhooks.router, prefix=API_PREFIX)
+app.include_router(store_settings.router, prefix=API_PREFIX)
+app.include_router(reports.router, prefix=API_PREFIX)
 
 
 @app.get("/", tags=["Health"])

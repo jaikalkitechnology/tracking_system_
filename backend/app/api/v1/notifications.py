@@ -49,3 +49,22 @@ def mark_all_read(db: Session = Depends(get_db), current_user: User = Depends(ge
     )
     db.commit()
     return {"success": True, "message": "All notifications marked as read"}
+
+
+@router.delete("", status_code=204)
+def clear_all_notifications(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    db.query(Notification).filter(Notification.user_id == current_user.id).delete()
+    db.commit()
+
+
+@router.delete("/{notification_id}", status_code=204)
+def delete_notification(notification_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    notification = (
+        db.query(Notification)
+        .filter(Notification.id == notification_id, Notification.user_id == current_user.id)
+        .first()
+    )
+    if not notification:
+        raise AppError(404, "Notification not found", "NOTIFICATION_NOT_FOUND")
+    db.delete(notification)
+    db.commit()

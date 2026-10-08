@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.core.permissions import require_staff
 from app.database.database import get_db
-from app.models.product import Product
+from app.models.product import Product, ProductImage
 from app.models.user import User
-from app.schemas.product import ProductCreate, ProductResponse, ProductUpdate
+from app.schemas.product import ProductCreate, ProductImageCreate, ProductImageResponse, ProductResponse, ProductUpdate
 from app.utils.pagination import PaginatedResponse, PaginationParams, paginate
 from app.utils.response import AppError
 
@@ -18,18 +18,34 @@ def list_products(
     pagination: PaginationParams = Depends(),
     search: str | None = Query(None),
     status: str | None = Query(None),
+    category: str | None = Query(None),
+    stock_status: str | None = Query(None),
     sort_by: str = Query("created_at"),
     order: str = Query("desc"),
     db: Session = Depends(get_db),
 ):
-    query = select(Product)
+    query = select(Product).options(selectinload(Product.images))
     if search:
         query = query.filter(Product.name.ilike(f"%{search}%") | Product.sku.ilike(f"%{search}%"))
     if status:
         query = query.filter(Product.status == status)
+    if category:
+        query = query.filter(Product.category == category)
+    if stock_status == "OUT_OF_STOCK":
+        query = query.filter(Product.stock_quantity <= 0)
+    elif stock_status == "LOW_STOCK":
+        query = query.filter(Product.stock_quantity > 0, Product.stock_quantity <= Product.low_stock_threshold)
+    elif stock_status == "IN_STOCK":
+        query = query.filter(Product.stock_quantity > Product.low_stock_threshold)
     sort_column = getattr(Product, sort_by, Product.created_at)
     query = query.order_by(sort_column.desc() if order == "desc" else sort_column.asc())
     return paginate(db, query, pagination, ProductResponse)
+
+
+@router.get("/categories", response_model=list[str])
+def list_categories(db: Session = Depends(get_db)):
+    rows = db.query(Product.category).filter(Product.category.isnot(None)).distinct().order_by(Product.category).all()
+    return [row[0] for row in rows]
 
 
 @router.post("", response_model=ProductResponse, status_code=201)
@@ -46,7 +62,9 @@ def create_product(payload: ProductCreate, db: Session = Depends(get_db), _staff
 
 @router.get("/{product_id}", response_model=ProductResponse)
 def get_product(product_id: int, db: Session = Depends(get_db)):
-    product = db.query(Product).filter(Product.id == product_id).first()
+    product = (
+        db.query(Product).options(selectinload(Product.images)).filter(Product.id == product_id).first()
+    )
     if not product:
         raise AppError(404, "Product not found", "PRODUCT_NOT_FOUND")
     return product
@@ -72,4 +90,31 @@ def delete_product(product_id: int, db: Session = Depends(get_db), _staff: User 
     if not product:
         raise AppError(404, "Product not found", "PRODUCT_NOT_FOUND")
     db.delete(product)
+    db.commit()
+
+
+@router.post("/{product_id}/images", response_model=ProductImageResponse, status_code=201)
+def add_product_image(
+    product_id: int, payload: ProductImageCreate, db: Session = Depends(get_db), _staff: User = Depends(require_staff)
+):
+    product = db.query(Product).filter(Product.id == product_id).first()
+    if not product:
+        raise AppError(404, "Product not found", "PRODUCT_NOT_FOUND")
+    image = ProductImage(product_id=product_id, url=payload.url, position=payload.position)
+    db.add(image)
+    db.commit()
+    db.refresh(image)
+    return image
+
+
+@router.delete("/{product_id}/images/{image_id}", status_code=204)
+def delete_product_image(
+    product_id: int, image_id: int, db: Session = Depends(get_db), _staff: User = Depends(require_staff)
+):
+    image = (
+        db.query(ProductImage).filter(ProductImage.id == image_id, ProductImage.product_id == product_id).first()
+    )
+    if not image:
+        raise AppError(404, "Image not found", "IMAGE_NOT_FOUND")
+    db.delete(image)
     db.commit()

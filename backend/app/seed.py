@@ -104,10 +104,10 @@ def seed():
         db.flush()
 
         products = [
-            Product(sku="SKU-TSHIRT-001", name="Classic Cotton T-Shirt", description="100% cotton crew neck t-shirt.", price=499.00, weight=0.2, status=ProductStatus.ACTIVE),
-            Product(sku="SKU-SHOES-002", name="Running Shoes", description="Lightweight running shoes.", price=2499.00, weight=0.9, status=ProductStatus.ACTIVE),
-            Product(sku="SKU-BAG-003", name="Laptop Backpack", description="Water-resistant 15-inch laptop backpack.", price=1799.00, weight=0.8, status=ProductStatus.ACTIVE),
-            Product(sku="SKU-BOTTLE-004", name="Steel Water Bottle", description="1L insulated steel bottle.", price=699.00, weight=0.4, status=ProductStatus.ACTIVE),
+            Product(sku="SKU-TSHIRT-001", name="Classic Cotton T-Shirt", description="100% cotton crew neck t-shirt.", category="Apparel", price=499.00, weight=0.2, stock_quantity=120, low_stock_threshold=15, status=ProductStatus.ACTIVE),
+            Product(sku="SKU-SHOES-002", name="Running Shoes", description="Lightweight running shoes.", category="Footwear", price=2499.00, weight=0.9, stock_quantity=8, low_stock_threshold=10, status=ProductStatus.ACTIVE),
+            Product(sku="SKU-BAG-003", name="Laptop Backpack", description="Water-resistant 15-inch laptop backpack.", category="Bags", price=1799.00, weight=0.8, stock_quantity=25, low_stock_threshold=10, status=ProductStatus.ACTIVE),
+            Product(sku="SKU-BOTTLE-004", name="Steel Water Bottle", description="1L insulated steel bottle.", category="Accessories", price=699.00, weight=0.4, stock_quantity=0, low_stock_threshold=10, status=ProductStatus.ACTIVE),
         ]
         db.add_all(products)
         db.flush()

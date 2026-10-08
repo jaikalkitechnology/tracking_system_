@@ -2,10 +2,27 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.models.order import OrderStatus, PaymentStatus
+from app.models.order import OrderStatus, PaymentMethod, PaymentStatus
+from app.models.shipment import ShipmentStatus
 from app.schemas.address import AddressResponse
 from app.schemas.customer import CustomerResponse
 from app.schemas.product import ProductResponse
+
+
+class OrderCreatorResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    name: str
+
+
+class OrderShipmentSummary(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    shipment_number: str
+    tracking_number: str
+    status: ShipmentStatus
 
 
 class OrderItemCreate(BaseModel):
@@ -28,11 +45,16 @@ class OrderCreate(BaseModel):
     customer_id: int
     shipping_address_id: int | None = None
     billing_address_id: int | None = None
+    payment_method: PaymentMethod = PaymentMethod.ONLINE
+    shipping_amount: float = 0
+    discount_amount: float = 0
+    tax_amount: float = 0
     items: list[OrderItemCreate]
 
 
 class OrderUpdate(BaseModel):
     payment_status: PaymentStatus | None = None
+    payment_method: PaymentMethod | None = None
     order_status: OrderStatus | None = None
     shipping_address_id: int | None = None
     billing_address_id: int | None = None
@@ -44,11 +66,17 @@ class OrderResponse(BaseModel):
     id: int
     order_number: str
     customer_id: int
+    subtotal_amount: float
+    shipping_amount: float
+    discount_amount: float
+    tax_amount: float
     total_amount: float
     payment_status: PaymentStatus
+    payment_method: PaymentMethod
     order_status: OrderStatus
     shipping_address_id: int | None
     billing_address_id: int | None
+    created_by: OrderCreatorResponse | None = None
     created_at: datetime
     updated_at: datetime
 
@@ -58,3 +86,4 @@ class OrderDetailResponse(OrderResponse):
     shipping_address: AddressResponse | None = None
     billing_address: AddressResponse | None = None
     items: list[OrderItemResponse] = []
+    shipments: list[OrderShipmentSummary] = []

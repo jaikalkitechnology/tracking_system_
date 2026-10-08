@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.core.permissions import require_staff
 from app.database.database import get_db
@@ -26,7 +26,7 @@ def list_customers(
     db: Session = Depends(get_db),
     _staff: User = Depends(require_staff),
 ):
-    query = select(Customer)
+    query = select(Customer).options(selectinload(Customer.orders))
     if search:
         query = query.filter(
             Customer.name.ilike(f"%{search}%") | Customer.email.ilike(f"%{search}%") | Customer.customer_code.ilike(f"%{search}%")
@@ -48,7 +48,12 @@ def create_customer(payload: CustomerCreate, db: Session = Depends(get_db), _sta
 
 @router.get("/{customer_id}", response_model=CustomerDetailResponse)
 def get_customer(customer_id: int, db: Session = Depends(get_db), _staff: User = Depends(require_staff)):
-    customer = db.query(Customer).filter(Customer.id == customer_id).first()
+    customer = (
+        db.query(Customer)
+        .options(selectinload(Customer.orders), selectinload(Customer.addresses))
+        .filter(Customer.id == customer_id)
+        .first()
+    )
     if not customer:
         raise AppError(404, "Customer not found", "CUSTOMER_NOT_FOUND")
     return customer

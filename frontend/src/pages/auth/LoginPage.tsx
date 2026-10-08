@@ -1,25 +1,27 @@
-import { FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { getApiErrorMessage } from "@/api/axios";
 import { Button } from "@/components/ui/Button";
 import { Input, Label } from "@/components/ui/Input";
+import { IconEye, IconEyeOff } from "@/components/ui/icons";
 import { useAuth } from "@/context/AuthContext";
 
 export function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [searchParams] = useSearchParams();
+  const [email, setEmail] = useState(() => searchParams.get("email") || searchParams.get("username") || "");
+  const [password, setPassword] = useState(() => searchParams.get("password") || "");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const doLogin = async (loginEmail: string, loginPassword: string) => {
     setError(null);
     setIsSubmitting(true);
     try {
-      const user = await login(email, password);
+      const user = await login(loginEmail, loginPassword);
       navigate(user.role === "CUSTOMER" ? "/customer/orders" : "/dashboard");
     } catch (err) {
       setError(getApiErrorMessage(err));
@@ -27,6 +29,25 @@ export function LoginPage() {
       setIsSubmitting(false);
     }
   };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    doLogin(email, password);
+  };
+
+  // Auto sign-in when the URL already carries both ?email=...&password=... (or ?username=...),
+  // e.g. a bookmarked link - runs once on mount only.
+  const autoLoginAttempted = useRef(false);
+  useEffect(() => {
+    if (autoLoginAttempted.current) return;
+    const urlEmail = searchParams.get("email") || searchParams.get("username");
+    const urlPassword = searchParams.get("password");
+    if (urlEmail && urlPassword) {
+      autoLoginAttempted.current = true;
+      doLogin(urlEmail, urlPassword);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-card dark:border-surface-dark-border dark:bg-surface-dark-subtle dark:shadow-card-dark">
@@ -45,24 +66,30 @@ export function LoginPage() {
         </div>
         <div>
           <Label>Password</Label>
-          <Input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" />
+          <div className="relative">
+            <Input
+              type={showPassword ? "text" : "password"}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className="pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              tabIndex={-1}
+            >
+              {showPassword ? <IconEyeOff className="h-4 w-4" /> : <IconEye className="h-4 w-4" />}
+            </button>
+          </div>
         </div>
         <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? "Signing in..." : "Sign in"}
         </Button>
       </form>
-
-      <p className="mt-4 text-center text-sm text-slate-500 dark:text-slate-400">
-        Don&apos;t have an account?{" "}
-        <Link to="/register" className="font-medium text-brand-600 hover:underline dark:text-brand-400">
-          Create one
-        </Link>
-      </p>
-      <p className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
-        <Link to="/track" className="font-medium text-brand-600 hover:underline dark:text-brand-400">
-          Track a shipment without signing in
-        </Link>
-      </p>
     </div>
   );
 }

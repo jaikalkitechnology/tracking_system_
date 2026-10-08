@@ -14,6 +14,11 @@ class PaymentStatus(str, enum.Enum):
     REFUNDED = "REFUNDED"
 
 
+class PaymentMethod(str, enum.Enum):
+    ONLINE = "ONLINE"
+    COD = "COD"
+
+
 class OrderStatus(str, enum.Enum):
     PENDING = "PENDING"
     CONFIRMED = "CONFIRMED"
@@ -28,14 +33,21 @@ class Order(TimestampMixin, Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     order_number: Mapped[str] = mapped_column(String(40), unique=True, index=True, nullable=False)
     customer_id: Mapped[int] = mapped_column(ForeignKey("customers.id"), index=True, nullable=False)
+    subtotal_amount: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False, default=0)
+    shipping_amount: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False, default=0)
+    discount_amount: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False, default=0)
+    tax_amount: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False, default=0)
     total_amount: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False, default=0)
     payment_status: Mapped[PaymentStatus] = mapped_column(Enum(PaymentStatus), default=PaymentStatus.PENDING, nullable=False)
+    payment_method: Mapped[PaymentMethod] = mapped_column(Enum(PaymentMethod), default=PaymentMethod.ONLINE, nullable=False)
     order_status: Mapped[OrderStatus] = mapped_column(Enum(OrderStatus), default=OrderStatus.PENDING, nullable=False, index=True)
     shipping_address_id: Mapped[int | None] = mapped_column(ForeignKey("addresses.id"), nullable=True)
     billing_address_id: Mapped[int | None] = mapped_column(ForeignKey("addresses.id"), nullable=True)
+    created_by_user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
 
     customer = relationship("Customer", back_populates="orders")
     shipping_address = relationship("Address", foreign_keys=[shipping_address_id])
     billing_address = relationship("Address", foreign_keys=[billing_address_id])
+    created_by = relationship("User", foreign_keys=[created_by_user_id])
     items = relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
     shipments = relationship("Shipment", back_populates="order")

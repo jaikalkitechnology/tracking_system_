@@ -52,7 +52,7 @@ export function CustomerLayout() {
           <span className="hidden text-sm text-slate-500 dark:text-slate-400 sm:inline">{user?.name}</span>
           <Button variant="secondary" onClick={handleLogout}>
             <IconLogout className="h-4 w-4" />
-            Logout
+            <span className="hidden sm:inline">Logout</span>
           </Button>
         </div>
       </header>

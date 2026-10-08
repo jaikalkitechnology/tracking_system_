@@ -28,6 +28,18 @@ class TrackingEventResponse(BaseModel):
     event_time: datetime
 
 
+class RecentActivityResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    status: ShipmentStatus
+    title: str
+    location: str | None
+    event_time: datetime
+    shipment_id: int
+    tracking_number: str
+
+
 class PublicTrackingResponse(BaseModel):
     tracking_number: str
     status: ShipmentStatus
