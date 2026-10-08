@@ -215,6 +215,12 @@ export const IconX = (props: IconProps) => (
   </svg>
 );
 
+export const IconMenu = (props: IconProps) => (
+  <svg {...base(props)}>
+    <path d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+);
+
 export const IconEdit = (props: IconProps) => (
   <svg {...base(props)}>
     <path d="M12 20h9" />

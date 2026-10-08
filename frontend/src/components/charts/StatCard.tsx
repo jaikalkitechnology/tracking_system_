@@ -51,7 +51,7 @@ export function StatCard({ label, value, icon, tone = "slate", trend, trendLabel
           </div>
         )}
         <div className="min-w-0">
-          <p className="truncate text-sm text-slate-500 dark:text-slate-400">{label}</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">{label}</p>
           <p className="mt-0.5 text-2xl font-bold text-slate-900 dark:text-slate-50">{value}</p>
           {trend !== undefined && (
             <p className="mt-1">
